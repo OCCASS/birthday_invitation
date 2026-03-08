@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>An Evening by the Sea</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cormorant:ital,wght@0,300;1,300&display=swap" rel="stylesheet" />
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    /* ───────────────────────────── RESET + VARIABLES ───────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:        #f0e8d8;
+      --paper:        #ede0c8;
+      --parchment:    #e8dcc4;
+      --blue:         #6b8fa8;
+      --dusty-blue:   #82a5be;
+      --deep-blue:    #2a5068;
+      --navy:         #1a3448;
+      --gold:         #c4a46b;
+      --gold-light:   #d4b880;
+      --text:         #2d3a3a;
+      --text-muted:   #5a6a6a;
+      --white-soft:   rgba(255,255,255,0.7);
+    }
+
+    html {
+      scroll-behavior: auto;
+      overflow-x: hidden;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--text);
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* ───────────────────────────── PAPER TEXTURE OVERLAY ───────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      background-size: 300px 300px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════════
+       SECTION 1 — HERO
+    ═══════════════════════════════════════════════════════════════════════════════ */
+    #hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--cream);
+      overflow: hidden;
+    }
+
+    /* Subtle radial warmth at center */
+    #hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 45%,
+        rgba(196,164,107,0.06) 0%,
+        transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── Decorative SVG Frame ── */
+    .frame-svg {
+      position: absolute;
+      inset: 32px;
+      width: calc(100% - 64px);
+      height: calc(100% - 64px);
+      pointer-events: none;
+    }
+
+    .frame-path {
+      fill: none;
+      stroke: var(--blue);
+      stroke-width: 1;
+      opacity: 0.6;
+      stroke-dasharray: 3000;
+      stroke-dashoffset: 3000;
+    }
+
+    .frame-inner {
+      fill: none;
+      stroke: var(--blue);
+      stroke-width: 0.5;
+      opacity: 0.35;
+      stroke-dasharray: 2500;
+      stroke-dashoffset: 2500;
+    }
+
+    /* ── Corner ornaments ── */
+    .corner-ornament {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      opacity: 0;
+    }
+    .corner-ornament svg { width: 100%; height: 100%; }
+    .corner-ornament.tl { top: 44px; left: 44px; }
+    .corner-ornament.tr { top: 44px; right: 44px; transform: scaleX(-1); }
+    .corner-ornament.bl { bottom: 44px; left: 44px; transform: scaleY(-1); }
+    .corner-ornament.br { bottom: 44px; right: 44px; transform: scale(-1); }
+
+    /* ── Shell pair for opening effect ── */
+    .shell-left, .shell-right {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0;
+    }
+    .shell-left  { left: 50%; transform: translate(-110%, -50%); }
+    .shell-right { left: 50%; transform: translate(10%, -50%); }
+    .shell-left svg, .shell-right svg { width: 90px; height: 90px; }
+
+    /* ── Floating decorative line ── */
+    .hero-divider {
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--blue), transparent);
+      opacity: 0.4;
+    }
+
+    /* ── Hero Content ── */
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+      padding: 0 40px;
+      max-width: 680px;
+    }
+
+    .hero-overline {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--blue);
+      opacity: 0;
+      margin-bottom: 24px;
+    }
+
+    .hero-script {
+      font-family: 'Parisienne', cursive;
+      font-size: clamp(3.2rem, 9vw, 6.5rem);
+      color: var(--blue);
+      line-height: 1.1;
+      opacity: 0;
+      letter-spacing: 0.01em;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .hero-name {
+      font-family: 'Parisienne', cursive;
+      font-size: clamp(2rem, 6vw, 4rem);
+      color: var(--deep-blue);
+      opacity: 0;
+      display: block;
+      margin-bottom: 28px;
+    }
+
+    .hero-separator {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 24px;
+      opacity: 0;
+    }
+    .hero-separator::before,
+    .hero-separator::after {
+      content: '';
+      flex: 1;
+      max-width: 80px;
+      height: 1px;
+      background: var(--blue);
+      opacity: 0.5;
+    }
+    .sep-icon {
+      color: var(--gold);
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+    }
+
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      color: var(--text-muted);
+      line-height: 1.8;
+      opacity: 0;
+    }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--blue);
+      opacity: 0;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+    }
+    .scroll-arrow {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--blue), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.15); }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════════
+       SECTION 2 — ATMOSPHERE
+    ═══════════════════════════════════════════════════════════════════════════════ */
+    #atmosphere {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      background: var(--parchment);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 40px;
+      overflow: hidden;
+    }
+
+    #atmosphere::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 15% 50%, rgba(107,143,168,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 50% at 85% 50%, rgba(107,143,168,0.04) 0%, transparent 60%);
+    }
+
+    .atm-card {
+      position: relative;
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* floating micro shells */
+    .micro-shell {
+      position: absolute;
+      opacity: 0.25;
+      pointer-events: none;
+    }
+    .micro-shell svg { display: block; }
+
+    .atm-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 48px;
+      opacity: 0;
+    }
+
+    .atm-line {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(1.4rem, 3.5vw, 2rem);
+      line-height: 1.7;
+      color: var(--deep-blue);
+      margin-bottom: 16px;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .atm-line em {
+      font-style: italic;
+      color: var(--blue);
+    }
+
+    .atm-line:last-of-type {
+      margin-bottom: 56px;
+    }
+
+    .atm-signature {
+      font-family: 'Parisienne', cursive;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      color: var(--blue);
+      opacity: 0;
+    }
+
+    .atm-rule {
+      width: 60px;
+      height: 1px;
+      background: var(--blue);
+      margin: 32px auto;
+      opacity: 0;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════════
+       SECTION 3 — INVITATION SEAL
+    ═══════════════════════════════════════════════════════════════════════════════ */
+    #seal-section {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 620px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--cream);
+      overflow: hidden;
+    }
+
+    /* Warm sunset glow that layers on top of paper */
+    .seal-bg-glow {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 85% 70% at 50% 48%,
+          rgba(210,175,115,0.13) 0%,
+          rgba(196,164,107,0.06) 50%,
+          transparent 75%),
+        radial-gradient(ellipse 60% 40% at 50% 100%,
+          rgba(196,164,107,0.07) 0%,
+          transparent 60%);
+      opacity: 0;
+      pointer-events: none;
+      transition: none;
+    }
+
+    /* Converging frame — starts slightly large, settles inward */
+    .seal-frame {
+      position: absolute;
+      inset: 36px;
+      width: calc(100% - 72px);
+      height: calc(100% - 72px);
+      transform-origin: center center;
+      transform: scale(1.025);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .seal-frame-outer { stroke-dasharray: 2600; stroke-dashoffset: 2600; }
+    .seal-frame-inner { stroke-dasharray: 2200; stroke-dashoffset: 2200; }
+
+    /* Floating ornament SVG overlay */
+    .seal-ornaments-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+    .seal-orn-path {
+      stroke-dasharray: 300;
+      stroke-dashoffset: 300;
+    }
+
+    /* Ribbon / bow */
+    .ribbon-wrap {
+      position: absolute;
+      top: 38px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-14px);
+      opacity: 0;
+      pointer-events: none;
+      width: 200px;
+      height: 96px;
+    }
+    .ribbon-svg { width: 100%; height: 100%; }
+    .ribbon-path {
+      stroke-dasharray: 400;
+      stroke-dashoffset: 400;
+    }
+
+    /* ── Center content ── */
+    .seal-center {
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      padding: 88px 40px 48px;
+      max-width: 520px;
+      width: 100%;
+    }
+
+    .seal-message {
+      font-family: 'Parisienne', cursive;
+      font-size: clamp(2.4rem, 7vw, 4rem);
+      color: var(--deep-blue);
+      line-height: 1.25;
+      opacity: 0;
+      transform: translateY(22px);
+    }
+
+    /* ── Pearl seal ── */
+    .pearl-seal {
+      position: relative;
+      width: 54px;
+      height: 54px;
+      opacity: 0;
+      transform: translateY(-20px) scale(0.82);
+    }
+    .pearl-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 33% 30%,
+        #ffffff 0%,
+        #eaf3f8 18%,
+        #c2d8e8 45%,
+        #92b8d0 72%,
+        #6b8fa8 100%);
+      box-shadow:
+        inset -4px -4px 10px rgba(0,0,0,0.10),
+        inset  3px  3px  8px rgba(255,255,255,0.55),
+        0 6px 24px rgba(107,143,168,0.28),
+        0 2px  8px rgba(0,0,0,0.10);
+    }
+    /* subtle ribs like a shell */
+    .pearl-inner::after {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border-radius: 50%;
+      background: transparent;
+      box-shadow: inset 0 -2px 6px rgba(255,255,255,0.18);
+    }
+    .pearl-glow {
+      position: absolute;
+      inset: -18px;
+      border-radius: 50%;
+      background: radial-gradient(circle,
+        rgba(196,164,107,0.22) 0%,
+        rgba(107,143,168,0.12) 40%,
+        transparent 70%);
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    /* Continuous gentle pulse on the glow */
+    @keyframes pearlPulse {
+      0%, 100% { transform: scale(1);   opacity: 0.85; }
+      50%       { transform: scale(1.1); opacity: 1;    }
+    }
+
+    /* ── Event info ── */
+    .seal-info {
+      opacity: 0;
+      transform: translateY(18px);
+      text-align: center;
+    }
+    .seal-date {
+      font-family: 'Parisienne', cursive;
+      font-size: clamp(1.5rem, 4.5vw, 2.1rem);
+      color: var(--blue);
+      margin-bottom: 4px;
+    }
+    .seal-time {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.78rem, 1.6vw, 0.92rem);
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+    .seal-info-div {
+      width: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--blue), transparent);
+      opacity: 0.45;
+      margin: 0 auto 20px;
+    }
+    .seal-venue {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.8;
+    }
+    .seal-address {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.68rem, 1.4vw, 0.8rem);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* ── Floating dust particles ── */
+    .particles-wrap {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0;
+    }
+    @keyframes particleDrift {
+      0%   { transform: translateY(0)   rotate(0deg);   opacity: 0; }
+      15%  { opacity: 1; }
+      85%  { opacity: 0.6; }
+      100% { transform: translateY(-60px) rotate(180deg); opacity: 0; }
+    }
+
+    /* ───────────────────────────── RESPONSIVE ───────────────────────────────── */
+    @media (max-width: 600px) {
+      .frame-svg { inset: 16px; width: calc(100% - 32px); height: calc(100% - 32px); }
+      .corner-ornament.tl { top: 20px; left: 20px; }
+      .corner-ornament.tr { top: 20px; right: 20px; }
+      .corner-ornament.bl { bottom: 20px; left: 20px; }
+      .corner-ornament.br { bottom: 20px; right: 20px; }
+      .seal-center { padding: 80px 24px 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     SECTION 1 — HERO
+═══════════════════════════════════════════════════════════════════════════ -->
+<section id="hero">
+
+  <!-- Decorative outer frame -->
+  <svg class="frame-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <!-- Outer border -->
+    <path class="frame-path" d="
+      M 2,2
+      L 98,2
+      L 98,98
+      L 2,98
+      Z
+    "/>
+    <!-- Inner border -->
+    <path class="frame-inner" d="
+      M 4,4
+      L 96,4
+      L 96,96
+      L 4,96
+      Z
+    "/>
+    <!-- Top center ornament line -->
+    <line class="frame-inner" x1="20" y1="4" x2="80" y2="4"/>
+    <!-- Bottom center ornament line -->
+    <line class="frame-inner" x1="20" y1="96" x2="80" y2="96"/>
+  </svg>
+
+  <!-- Corner ornaments -->
+  <div class="corner-ornament tl">
+    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 4 4 L 36 4" stroke="#6b8fa8" stroke-width="0.8" opacity="0.7"/>
+      <path d="M 4 4 L 4 36" stroke="#6b8fa8" stroke-width="0.8" opacity="0.7"/>
+      <path d="M 4 4 Q 12 12 20 12 Q 28 12 28 20" stroke="#6b8fa8" stroke-width="0.6" fill="none" opacity="0.45"/>
+      <!-- tiny shell silhouette -->
+      <ellipse cx="10" cy="10" rx="5" ry="3.5" stroke="#c4a46b" stroke-width="0.6" fill="none" opacity="0.5" transform="rotate(-45 10 10)"/>
+      <path d="M 7 12 Q 10 8 13 12" stroke="#c4a46b" stroke-width="0.5" fill="none" opacity="0.4" transform="rotate(-45 10 10)"/>
+    </svg>
+  </div>
+  <div class="corner-ornament tr">
+    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 4 4 L 36 4" stroke="#6b8fa8" stroke-width="0.8" opacity="0.7"/>
+      <path d="M 4 4 L 4 36" stroke="#6b8fa8" stroke-width="0.8" opacity="0.7"/>
+      <path d="M 4 4 Q 12 12 20 12 Q 28 12 28 20" stroke="#6b8fa8" stroke-width="0.6" fill="none" opacity="0.45"/>
+      <ellipse cx="10" cy="10" rx="5" ry="3.5" stroke="#c4a46b" stroke-width="0.6" fill="none" opacity="0.5" transform="rotate(-45 10 10)"/>
+    </svg>
+  </div>
+  <div class="corner-ornament bl">
+    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 4 4 L 36 4" stroke="#6b8fa8" stroke-width="0.8" opacity="0.7"/>
+      <path d="M 4 4 L 4 36" stroke="#6b8fa8" stroke-width="0.8" opacity="0.7"/>
+      <path d="M 4 4 Q 12 12 20 12 Q 28 12 28 20" stroke="#6b8fa8" stroke-width="0.6" fill="none" opacity="0.45"/>
+      <ellipse cx="10" cy="10" rx="5" ry="3.5" stroke="#c4a46b" stroke-width="0.6" fill="none" opacity="0.5" transform="rotate(-45 10 10)"/>
+    </svg>
+  </div>
+  <div class="corner-ornament br">
+    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 4 4 L 36 4" stroke="#6b8fa8" stroke-width="0.8" opacity="0.7"/>
+      <path d="M 4 4 L 4 36" stroke="#6b8fa8" stroke-width="0.8" opacity="0.7"/>
+      <path d="M 4 4 Q 12 12 20 12 Q 28 12 28 20" stroke="#6b8fa8" stroke-width="0.6" fill="none" opacity="0.45"/>
+      <ellipse cx="10" cy="10" rx="5" ry="3.5" stroke="#c4a46b" stroke-width="0.6" fill="none" opacity="0.5" transform="rotate(-45 10 10)"/>
+    </svg>
+  </div>
+
+  <!-- Shell opening elements -->
+  <div class="shell-left" id="shellLeft">
+    <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 75 45 Q 60 15 30 20 Q 8 25 10 45 Q 8 65 30 70 Q 60 75 75 45 Z"
+        fill="rgba(107,143,168,0.07)" stroke="#6b8fa8" stroke-width="0.8"/>
+      <path d="M 75 45 Q 55 35 35 38 Q 20 40 18 45" stroke="#82a5be" stroke-width="0.5" fill="none" opacity="0.5"/>
+      <path d="M 75 45 Q 55 42 35 46 Q 20 48 18 45" stroke="#82a5be" stroke-width="0.5" fill="none" opacity="0.5"/>
+      <path d="M 75 45 Q 55 50 35 54 Q 20 54 18 45" stroke="#82a5be" stroke-width="0.5" fill="none" opacity="0.5"/>
+      <path d="M 75 45 Q 57 56 38 62 Q 25 64 18 45" stroke="#82a5be" stroke-width="0.5" fill="none" opacity="0.3"/>
+      <circle cx="75" cy="45" r="3" fill="#c4a46b" opacity="0.5"/>
+    </svg>
+  </div>
+  <div class="shell-right" id="shellRight">
+    <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 15 45 Q 30 15 60 20 Q 82 25 80 45 Q 82 65 60 70 Q 30 75 15 45 Z"
+        fill="rgba(107,143,168,0.07)" stroke="#6b8fa8" stroke-width="0.8"/>
+      <path d="M 15 45 Q 35 35 55 38 Q 70 40 72 45" stroke="#82a5be" stroke-width="0.5" fill="none" opacity="0.5"/>
+      <path d="M 15 45 Q 35 42 55 46 Q 70 48 72 45" stroke="#82a5be" stroke-width="0.5" fill="none" opacity="0.5"/>
+      <path d="M 15 45 Q 35 50 55 54 Q 70 54 72 45" stroke="#82a5be" stroke-width="0.5" fill="none" opacity="0.5"/>
+      <circle cx="15" cy="45" r="3" fill="#c4a46b" opacity="0.5"/>
+    </svg>
+  </div>
+
+  <!-- Main content -->
+  <div class="hero-content">
+    <p class="hero-overline" id="heroOverline">A birthday evening by the sea</p>
+    <span class="hero-script" id="heroScript">Please join me</span>
+    <span class="hero-name" id="heroName"></span>
+
+    <div class="hero-separator" id="heroSep">
+      <span class="sep-icon">✦</span>
+    </div>
+
+    <p class="hero-sub" id="heroSub">
+      I'd love for you to be part of<br/>
+      this soft and beautiful evening
+    </p>
+  </div>
+
+  <div class="hero-scroll-hint" id="scrollHint">
+    <div class="scroll-arrow"></div>
+  </div>
+
+  <div class="hero-divider"></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     SECTION 2 — ATMOSPHERE
+═══════════════════════════════════════════════════════════════════════════ -->
+<section id="atmosphere">
+
+  <!-- Micro shells floating -->
+  <div class="micro-shell" style="top:12%;left:8%;transform:rotate(-20deg)">
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <ellipse cx="16" cy="16" rx="12" ry="8" stroke="#6b8fa8" stroke-width="0.8" fill="rgba(107,143,168,0.06)"/>
+      <path d="M 4 16 Q 10 10 16 12 Q 22 14 28 16" stroke="#6b8fa8" stroke-width="0.5" fill="none"/>
+      <path d="M 4 16 Q 10 18 16 20 Q 22 20 28 16" stroke="#6b8fa8" stroke-width="0.5" fill="none"/>
+    </svg>
+  </div>
+  <div class="micro-shell" style="top:70%;right:6%;transform:rotate(15deg)">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <ellipse cx="12" cy="12" rx="9" ry="6" stroke="#c4a46b" stroke-width="0.7" fill="rgba(196,164,107,0.05)"/>
+      <path d="M 3 12 Q 7 8 12 9 Q 17 10 21 12" stroke="#c4a46b" stroke-width="0.4" fill="none"/>
+    </svg>
+  </div>
+  <div class="micro-shell" style="bottom:15%;left:12%;transform:rotate(30deg)">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <ellipse cx="10" cy="10" rx="8" ry="5" stroke="#6b8fa8" stroke-width="0.6" fill="none"/>
+      <path d="M 2 10 Q 6 7 10 8 Q 14 9 18 10" stroke="#6b8fa8" stroke-width="0.4" fill="none"/>
+      <path d="M 2 10 Q 6 13 10 12 Q 14 11 18 10" stroke="#6b8fa8" stroke-width="0.4" fill="none"/>
+    </svg>
+  </div>
+
+  <div class="atm-card" id="atmCard">
+    <p class="atm-eyebrow">an intimate gathering</p>
+
+    <p class="atm-line atm-l1">
+      A <em>beautiful evening</em> by the sea,
+    </p>
+    <p class="atm-line atm-l2">
+      warm air and soft golden light,
+    </p>
+    <p class="atm-line atm-l3">
+      the kind of night that stays with you —
+    </p>
+    <p class="atm-line atm-l4">
+      and the people <em>closest to my heart.</em>
+    </p>
+
+    <div class="atm-rule" id="atmRule"></div>
+    <p class="atm-signature" id="atmSig">with love</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     SECTION 3 — INVITATION SEAL
+═══════════════════════════════════════════════════════════════════════════ -->
+<section id="seal-section">
+
+  <!-- Warm glow layer -->
+  <div class="seal-bg-glow" id="sealBgGlow"></div>
+
+  <!-- Converging outer frame -->
+  <svg class="seal-frame" id="sealFrame" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <rect class="seal-frame-outer" x="1.5" y="1.5" width="97" height="97"
+      fill="none" stroke="#6b8fa8" stroke-width="0.65" opacity="0.6"/>
+    <rect class="seal-frame-inner" x="3.5" y="3.5" width="93" height="93"
+      fill="none" stroke="#6b8fa8" stroke-width="0.35" opacity="0.4"/>
+    <line x1="15" y1="3.5" x2="85" y2="3.5"   stroke="#6b8fa8" stroke-width="0.35" opacity="0.35" class="seal-frame-inner"/>
+    <line x1="15" y1="96.5" x2="85" y2="96.5" stroke="#6b8fa8" stroke-width="0.35" opacity="0.35" class="seal-frame-inner"/>
+    <line x1="3.5" y1="20" x2="3.5" y2="80"   stroke="#6b8fa8" stroke-width="0.35" opacity="0.35" class="seal-frame-inner"/>
+    <line x1="96.5" y1="20" x2="96.5" y2="80" stroke="#6b8fa8" stroke-width="0.35" opacity="0.35" class="seal-frame-inner"/>
+  </svg>
+
+  <!-- Re-drawing ornament flourishes -->
+  <svg class="seal-ornaments-svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
+    <!-- Top-left corner flourish -->
+    <path class="seal-orn-path" d="M 58 58 Q 82 42 116 48 Q 138 52 148 66"
+      stroke="#6b8fa8" stroke-width="0.9" fill="none" opacity="0.5"/>
+    <path class="seal-orn-path" d="M 58 58 Q 58 82 73 98 Q 81 108 96 114"
+      stroke="#6b8fa8" stroke-width="0.9" fill="none" opacity="0.5"/>
+    <path class="seal-orn-path" d="M 60 60 Q 92 80 88 114"
+      stroke="#c4a46b" stroke-width="0.65" fill="none" opacity="0.38"/>
+    <!-- shell at top-left -->
+    <ellipse class="seal-orn-path" cx="72" cy="72" rx="7" ry="4.5"
+      stroke="#c4a46b" stroke-width="0.65" fill="none" opacity="0.45" transform="rotate(-38 72 72)"/>
+
+    <!-- Top-right corner flourish (mirror) -->
+    <path class="seal-orn-path" d="M 742 58 Q 718 42 684 48 Q 662 52 652 66"
+      stroke="#6b8fa8" stroke-width="0.9" fill="none" opacity="0.5"/>
+    <path class="seal-orn-path" d="M 742 58 Q 742 82 727 98 Q 719 108 704 114"
+      stroke="#6b8fa8" stroke-width="0.9" fill="none" opacity="0.5"/>
+    <path class="seal-orn-path" d="M 740 60 Q 708 80 712 114"
+      stroke="#c4a46b" stroke-width="0.65" fill="none" opacity="0.38"/>
+    <ellipse class="seal-orn-path" cx="728" cy="72" rx="7" ry="4.5"
+      stroke="#c4a46b" stroke-width="0.65" fill="none" opacity="0.45" transform="rotate(38 728 72)"/>
+
+    <!-- Bottom-left corner flourish -->
+    <path class="seal-orn-path" d="M 58 542 Q 82 558 116 552 Q 138 548 148 534"
+      stroke="#6b8fa8" stroke-width="0.9" fill="none" opacity="0.45"/>
+    <path class="seal-orn-path" d="M 58 542 Q 58 518 73 502 Q 81 492 96 486"
+      stroke="#6b8fa8" stroke-width="0.9" fill="none" opacity="0.45"/>
+    <!-- Bottom-right corner flourish -->
+    <path class="seal-orn-path" d="M 742 542 Q 718 558 684 552 Q 662 548 652 534"
+      stroke="#6b8fa8" stroke-width="0.9" fill="none" opacity="0.45"/>
+    <path class="seal-orn-path" d="M 742 542 Q 742 518 727 502 Q 719 492 704 486"
+      stroke="#6b8fa8" stroke-width="0.9" fill="none" opacity="0.45"/>
+
+    <!-- Top center flourish -->
+    <path class="seal-orn-path" d="M 346 50 Q 370 44 400 46 Q 430 44 454 50"
+      stroke="#6b8fa8" stroke-width="0.75" fill="none" opacity="0.42"/>
+    <!-- Bottom center flourish -->
+    <path class="seal-orn-path" d="M 346 550 Q 370 556 400 554 Q 430 556 454 550"
+      stroke="#6b8fa8" stroke-width="0.75" fill="none" opacity="0.42"/>
+  </svg>
+
+  <!-- Ribbon / bow at top center -->
+  <div class="ribbon-wrap" id="ribbonWrap">
+    <svg class="ribbon-svg" viewBox="0 0 200 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Left ribbon loop -->
+      <path class="ribbon-path"
+        d="M 100 48 C 80 20, 36 10, 24 32 C 12 54, 56 64, 100 48 Z"
+        stroke="#6b8fa8" stroke-width="1.1" fill="rgba(107,143,168,0.05)"/>
+      <!-- Right ribbon loop -->
+      <path class="ribbon-path"
+        d="M 100 48 C 120 20, 164 10, 176 32 C 188 54, 144 64, 100 48 Z"
+        stroke="#6b8fa8" stroke-width="1.1" fill="rgba(107,143,168,0.05)"/>
+      <!-- Left tail -->
+      <path class="ribbon-path"
+        d="M 93 52 C 80 66, 68 76, 56 86"
+        stroke="#6b8fa8" stroke-width="1.1" fill="none"/>
+      <!-- Right tail -->
+      <path class="ribbon-path"
+        d="M 107 52 C 120 66, 132 76, 144 86"
+        stroke="#6b8fa8" stroke-width="1.1" fill="none"/>
+      <!-- Center knot -->
+      <ellipse class="ribbon-path" cx="100" cy="48" rx="7.5" ry="5.5"
+        stroke="#6b8fa8" stroke-width="1.1" fill="rgba(107,143,168,0.18)"/>
+      <!-- Loop highlight lines (subtler) -->
+      <path class="ribbon-path"
+        d="M 100 48 C 82 32, 48 26, 36 36"
+        stroke="#82a5be" stroke-width="0.55" fill="none" opacity="0.55"/>
+      <path class="ribbon-path"
+        d="M 100 48 C 118 32, 152 26, 164 36"
+        stroke="#82a5be" stroke-width="0.55" fill="none" opacity="0.55"/>
+    </svg>
+  </div>
+
+  <!-- Center composition -->
+  <div class="seal-center" id="sealCenter">
+    <p class="seal-message" id="sealMessage">See you<br/>by the sea</p>
+
+    <!-- Pearl seal -->
+    <div class="pearl-seal" id="pearlSeal">
+      <div class="pearl-inner"></div>
+      <div class="pearl-glow" id="pearlGlow"></div>
+    </div>
+
+    <!-- Event details -->
+    <div class="seal-info" id="sealInfo">
+      <p class="seal-date">Saturday, July 12</p>
+      <p class="seal-time">19 : 00</p>
+      <div class="seal-info-div" id="sealInfoDiv"></div>
+      <p class="seal-venue">Restaurant Paros</p>
+      <p class="seal-address">123 Ocean Street, Santorini</p>
+    </div>
+  </div>
+
+  <!-- Floating dust particles -->
+  <div class="particles-wrap" id="particlesWrap"></div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════════════════════════════════ -->
+<script>
+/* ─── 0. NAME FROM URL ───────────────────────────────────────────────────── */
+const params = new URLSearchParams(location.search);
+const guestName = params.get('name') || '';
+
+if (guestName) {
+  document.getElementById('heroName').textContent = guestName + ',';
+  document.getElementById('heroSub').innerHTML =
+    `I'd love for you to be part of<br/>this soft and beautiful evening`;
+}
+
+/* ─── 1. NATIVE SCROLL + LERPED PROXY ───────────────────────────────────── */
+// We track smoothScrollY as a lerped proxy of window.scrollY for
+// silky-smooth shader transitions, but DOM layout uses native scroll.
+let smoothScrollY = 0;
+const LERP_EASE = 0.09;
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+/* ─── 2. GSAP SETUP ──────────────────────────────────────────────────────── */
+gsap.registerPlugin(ScrollTrigger);
+
+/* ─── 3. HERO ENTRANCE ANIMATIONS ───────────────────────────────────────── */
+const framePath  = document.querySelector('.frame-path');
+const frameInner = document.querySelector('.frame-inner');
+
+// Frame draw-in
+gsap.to(framePath,  { strokeDashoffset: 0, duration: 2.4, ease: 'power2.inOut', delay: 0.2 });
+gsap.to(frameInner, { strokeDashoffset: 0, duration: 2.8, ease: 'power2.inOut', delay: 0.5 });
+
+// Corner ornaments
+gsap.to('.corner-ornament', {
+  opacity: 1, duration: 1, stagger: 0.15, delay: 1.8, ease: 'power2.out'
+});
+
+// Text stagger
+const heroTl = gsap.timeline({ delay: 0.8 });
+heroTl
+  .to('#heroOverline', { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' })
+  .to('#heroScript',   { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.5')
+  .to('#heroName',     { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, '-=0.7')
+  .to('#heroSep',      { opacity: 1,       duration: 0.8, ease: 'power2.out' }, '-=0.4')
+  .to('#heroSub',      { opacity: 1, y: 0, duration: 1,   ease: 'power3.out' }, '-=0.5')
+  .to('#scrollHint',   { opacity: 1,       duration: 0.8, ease: 'power2.out' }, '-=0.3');
+
+// Shells fade in
+gsap.to(['#shellLeft', '#shellRight'], {
+  opacity: 1, duration: 1.5, delay: 2.2, ease: 'power2.out'
+});
+
+// Floating micro-motion on shells
+gsap.to('#shellLeft',  { y: -8, x: -4, duration: 4, yoyo: true, repeat: -1, ease: 'sine.inOut', delay: 3 });
+gsap.to('#shellRight', { y:  8, x:  4, duration: 4.5, yoyo: true, repeat: -1, ease: 'sine.inOut', delay: 3.2 });
+
+// Micro-shells float
+document.querySelectorAll('.micro-shell').forEach((el, i) => {
+  gsap.to(el, {
+    y: `${(i % 2 === 0 ? -1 : 1) * 10}`,
+    x: `${(i % 3 === 0 ? -1 : 1) * 5}`,
+    duration: 4 + i * 0.7,
+    yoyo: true,
+    repeat: -1,
+    ease: 'sine.inOut',
+    delay: i * 0.5
+  });
+});
+
+/* ─── 4. SEAL SECTION — INIT STROKE LENGTHS ─────────────────────────────── */
+// Compute real path lengths so stroke animation is precise
+function initStrokePaths(selector) {
+  document.querySelectorAll(selector).forEach(el => {
+    const len = el.getTotalLength ? el.getTotalLength() : 300;
+    el.style.strokeDasharray  = len;
+    el.style.strokeDashoffset = len;
+  });
+}
+initStrokePaths('.seal-frame-outer');
+initStrokePaths('.seal-frame-inner');
+initStrokePaths('.seal-orn-path');
+initStrokePaths('.ribbon-path');
+
+/* ─── 5. GENERATE FLOATING PARTICLES ────────────────────────────────────── */
+(function spawnParticles() {
+  const wrap = document.getElementById('particlesWrap');
+  const COLORS = [
+    'rgba(196,164,107,0.5)',  // gold
+    'rgba(107,143,168,0.35)', // blue
+    'rgba(210,190,150,0.4)',  // warm sand
+    'rgba(255,255,255,0.45)', // white
+  ];
+  for (let i = 0; i < 26; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 3.5 + 1.2;
+    const x    = Math.random() * 92 + 4;  // % from left
+    const y    = Math.random() * 80 + 10; // % from top
+    const dur  = Math.random() * 8 + 7;
+    const del  = Math.random() * 5;
+    const col  = COLORS[Math.floor(Math.random() * COLORS.length)];
+    p.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${x}%; top:${y}%;
+      background:${col};
+      animation: particleDrift ${dur}s ${del}s ease-in-out infinite;
+    `;
+    wrap.appendChild(p);
+  }
+})();
+
+/* ─── 6. SEAL ANIMATION SEQUENCE (GSAP ScrollTrigger) ───────────────────── */
+let sealPlayed = false;
+
+ScrollTrigger.create({
+  trigger: '#seal-section',
+  start: 'top 60%',
+  onEnter: () => playSealSequence(),
+});
+
+function playSealSequence() {
+  if (sealPlayed) return;
+  sealPlayed = true;
+
+  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+  // ── Step 1: Warm glow breathes in
+  tl.to('#sealBgGlow', { opacity: 1, duration: 2.2, ease: 'power2.inOut' }, 0);
+
+  // ── Step 2: Converging frame — settle from scale(1.025) to scale(1), fade in
+  tl.to('#sealFrame', { opacity: 1, scale: 1, duration: 2.6, ease: 'power2.inOut',
+    transformOrigin: 'center center' }, 0.1);
+  // Frame paths draw themselves
+  tl.to('.seal-frame-outer', { strokeDashoffset: 0, duration: 2.4, ease: 'power2.inOut' }, 0.2);
+  tl.to('.seal-frame-inner', { strokeDashoffset: 0, duration: 2.8, ease: 'power2.inOut' }, 0.5);
+
+  // ── Step 3: Corner & ornament lines re-draw
+  tl.to('.seal-orn-path', {
+    strokeDashoffset: 0,
+    duration: 1.4,
+    stagger: 0.1,
+    ease: 'power2.inOut',
+  }, 0.9);
+
+  // ── Step 4: Ribbon appears — wrapper slides down, paths draw
+  tl.to('#ribbonWrap', { opacity: 1, y: 0, duration: 0.9, ease: 'back.out(1.3)',
+    transform: 'translateX(-50%) translateY(0)' }, 1.6);
+  tl.to('.ribbon-path', {
+    strokeDashoffset: 0,
+    duration: 1.1,
+    stagger: 0.07,
+    ease: 'power2.inOut',
+  }, 1.7);
+
+  // ── Step 5: Final message
+  tl.to('#sealMessage', { opacity: 1, y: 0, duration: 1.1, ease: 'power3.out' }, 2.8);
+
+  // ── Step 6: Pearl seal drops in
+  tl.to('#pearlSeal', {
+    opacity: 1, y: 0, scale: 1,
+    duration: 0.75,
+    ease: 'back.out(1.8)',
+  }, 3.7);
+  // Pearl glow blooms
+  tl.to('#pearlGlow', {
+    opacity: 1, scale: 1,
+    duration: 1.6,
+    ease: 'power2.out',
+  }, 3.85);
+  // Continuous gentle pulse after blooming
+  tl.call(() => {
+    gsap.to('#pearlGlow', {
+      scale: 1.12, opacity: 0.7,
+      duration: 2.2,
+      yoyo: true, repeat: -1,
+      ease: 'sine.inOut',
+    });
+  }, [], 5.5);
+
+  // ── Step 7: Event info fades in
+  tl.to('#sealInfo', { opacity: 1, y: 0, duration: 1.1 }, 4.2);
+  tl.to('#sealInfoDiv', { width: 60, duration: 0.8, ease: 'power2.inOut' }, 4.4);
+
+  // ── Step 8: Particles drift in
+  tl.to('.particle', {
+    opacity: 1,
+    stagger: { amount: 1.8, from: 'random' },
+    duration: 1.5,
+  }, 3.4);
+}
+
+/* ─── 7. RLOOP — shell open + atm reveal ────────────────────────────────── */
+let atmAnimated = false;
+
+function tick() {
+  requestAnimationFrame(tick);
+
+  smoothScrollY = lerp(smoothScrollY, window.scrollY, LERP_EASE);
+  const scrollY = smoothScrollY;
+
+  // ── Shell opening (hero exit)
+  const heroH   = document.getElementById('hero').offsetHeight;
+  const heroExit = Math.max(0, Math.min(1, scrollY / heroH));
+  document.getElementById('shellLeft').style.transform =
+    `translate(calc(-110% - ${heroExit * 140}px), -50%)`;
+  document.getElementById('shellRight').style.transform =
+    `translate(calc(10% + ${heroExit * 140}px), -50%)`;
+
+  // ── Atmosphere reveal
+  const atmSection  = document.getElementById('atmosphere');
+  const atmProgress = Math.max(0, Math.min(1,
+    (scrollY - atmSection.offsetTop + window.innerHeight * 0.75) / atmSection.offsetHeight));
+
+  if (atmProgress > 0 && !atmAnimated) {
+    atmAnimated = true;
+    gsap.to('.atm-eyebrow', { opacity: 1, duration: 0.9, ease: 'power2.out' });
+    document.querySelectorAll('.atm-line').forEach((line, i) => {
+      gsap.to(line, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: i * 0.18 });
+    });
+    gsap.to('#atmRule', { opacity: 1, width: 60, duration: 0.8, ease: 'power2.out', delay: 0.9 });
+    gsap.to('#atmSig',  { opacity: 1, duration: 1, ease: 'power2.out', delay: 1.1 });
+  }
+}
+requestAnimationFrame(tick);
+
+</script>
+</body>
+</html>
