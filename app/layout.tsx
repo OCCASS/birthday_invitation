@@ -1,10 +1,14 @@
 import type { Metadata } from 'next'
 import './globals.css'
 
+function getBaseUrl() {
+  if (process.env.NEXT_PUBLIC_BASE_URL) return process.env.NEXT_PUBLIC_BASE_URL
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`
+  return 'http://localhost:3000'
+}
+
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3000'
-  ),
+  metadataBase: new URL(getBaseUrl()),
   title: 'An Evening by the Sea',
 }
 

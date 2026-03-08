@@ -244,7 +244,7 @@ body::before {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background: var(--parchment);
+  background: var(--cream);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -323,7 +323,7 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--cream);
+  background: var(--parchment);
   overflow: hidden;
 }
 

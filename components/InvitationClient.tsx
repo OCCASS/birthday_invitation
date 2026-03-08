@@ -87,7 +87,7 @@ export default function InvitationClient({ name }: { name: string }) {
       /* ── 6. SEAL SEQUENCE (scroll-triggered, plays once) ── */
       let sealPlayed = false
       ScrollTrigger.create({
-        trigger: '#seal-section',
+        trigger: '#atmosphere',
         start: 'top 60%',
         onEnter: () => {
           if (sealPlayed) return
@@ -133,7 +133,7 @@ export default function InvitationClient({ name }: { name: string }) {
         if (sl) sl.style.transform = `translate(calc(-110% - ${heroExit * 140}px), -50%)`
         if (sr) sr.style.transform = `translate(calc(10%  + ${heroExit * 140}px), -50%)`
 
-        const atm = document.getElementById('atmosphere')
+        const atm = document.getElementById('seal-section')
         if (atm && !atmDone) {
           const prog = Math.max(0, Math.min(1,
             (sy - atm.offsetTop + window.innerHeight * 0.75) / atm.offsetHeight))
@@ -235,7 +235,7 @@ export default function InvitationClient({ name }: { name: string }) {
           </p>
           <span className="hero-script" id="heroScript">Please join me</span>
           <span className="hero-name" id="heroName">
-            {name ? `${name},` : ''}
+            {name ? name : ''}
           </span>
           <div className="hero-separator" id="heroSep">
             <span className="sep-icon">✦</span>
