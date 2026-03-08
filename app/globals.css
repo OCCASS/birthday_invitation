@@ -30,7 +30,7 @@ html {
 body {
   background: var(--cream);
   color: var(--text);
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-cormorant), serif;
   font-weight: 300;
   overflow-x: hidden;
   cursor: default;
@@ -116,7 +116,7 @@ body::before {
 }
 
 .hero-overline {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-cormorant), serif;
   font-weight: 400;
   font-size: clamp(0.65rem, 1.5vw, 0.8rem);
   letter-spacing: 0.35em;
@@ -127,7 +127,7 @@ body::before {
 }
 
 .hero-script {
-  font-family: "Parisienne", cursive;
+  font-family: var(--font-parisienne), cursive;
   font-size: clamp(3.2rem, 9vw, 6.5rem);
   color: var(--blue);
   line-height: 1.1;
@@ -138,7 +138,7 @@ body::before {
 }
 
 .hero-name {
-  font-family: "Parisienne", cursive;
+  font-family: var(--font-parisienne), cursive;
   font-size: clamp(2rem, 6vw, 4rem);
   color: var(--deep-blue);
   opacity: 0;
@@ -170,7 +170,7 @@ body::before {
 }
 
 .hero-sub {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-cormorant), serif;
   font-weight: 300;
   font-style: italic;
   font-size: clamp(1rem, 2.5vw, 1.35rem);
@@ -267,7 +267,7 @@ body::before {
 }
 
 .atm-line {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-cormorant), serif;
   font-weight: 300;
   font-size: clamp(1.4rem, 3.5vw, 2rem);
   line-height: 1.7;
@@ -285,7 +285,7 @@ body::before {
 }
 
 .atm-signature {
-  font-family: "Parisienne", cursive;
+  font-family: var(--font-parisienne), cursive;
   font-size: clamp(1.6rem, 4vw, 2.4rem);
   color: var(--blue);
   opacity: 0;
@@ -380,7 +380,7 @@ body::before {
 }
 
 .seal-message {
-  font-family: "Parisienne", cursive;
+  font-family: var(--font-parisienne), cursive;
   font-size: clamp(2.4rem, 7vw, 4rem);
   color: var(--deep-blue);
   line-height: 1.25;
@@ -441,13 +441,13 @@ body::before {
   text-align: center;
 }
 .seal-date {
-  font-family: "Parisienne", cursive;
+  font-family: var(--font-parisienne), cursive;
   font-size: clamp(1.5rem, 4.5vw, 2.1rem);
   color: var(--blue);
   margin-bottom: 4px;
 }
 .seal-time {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-cormorant), serif;
   font-size: clamp(0.78rem, 1.6vw, 0.92rem);
   letter-spacing: 0.38em;
   text-transform: uppercase;
@@ -462,7 +462,7 @@ body::before {
   margin: 0 auto 20px;
 }
 .seal-venue {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-cormorant), serif;
   font-weight: 400;
   font-size: clamp(0.95rem, 2vw, 1.15rem);
   font-style: italic;
@@ -470,7 +470,7 @@ body::before {
   line-height: 1.8;
 }
 .seal-address {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-cormorant), serif;
   font-size: clamp(0.68rem, 1.4vw, 0.8rem);
   letter-spacing: 0.22em;
   text-transform: uppercase;
