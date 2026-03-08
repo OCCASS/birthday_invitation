@@ -16,11 +16,20 @@ export default function InvitationClient({ name }: { name: string }) {
     ]).then(([{ default: gsap }, { ScrollTrigger }]) => {
       gsap.registerPlugin(ScrollTrigger)
 
-      /* ── 1. HERO FRAME DRAW-IN ── */
-      const framePath  = document.querySelector<SVGPathElement>('.frame-path')
-      const frameInner = document.querySelector<SVGPathElement>('.frame-inner')
-      if (framePath)  gsap.to(framePath,  { strokeDashoffset: 0, duration: 2.4, ease: 'power2.inOut', delay: 0.2 })
-      if (frameInner) gsap.to(frameInner, { strokeDashoffset: 0, duration: 2.8, ease: 'power2.inOut', delay: 0.5 })
+      /* ── 1. HERO FRAME DRAW-IN — CSS div scaleX/Y, clockwise ── */
+      const outerTl = gsap.timeline({ delay: 0.2, defaults: { ease: 'power2.inOut' } })
+      outerTl
+        .to('.h-out-top',    { scaleX: 1, duration: 0.55 })
+        .to('.h-out-right',  { scaleY: 1, duration: 0.55 })
+        .to('.h-out-bottom', { scaleX: 1, duration: 0.55 })
+        .to('.h-out-left',   { scaleY: 1, duration: 0.55 })
+
+      const innerTl = gsap.timeline({ delay: 0.4, defaults: { ease: 'power2.inOut' } })
+      innerTl
+        .to('.h-in-top',    { scaleX: 1, duration: 0.5 })
+        .to('.h-in-right',  { scaleY: 1, duration: 0.5 })
+        .to('.h-in-bottom', { scaleX: 1, duration: 0.5 })
+        .to('.h-in-left',   { scaleY: 1, duration: 0.5 })
 
       gsap.to('.corner-ornament', { opacity: 1, duration: 1, stagger: 0.15, delay: 1.8, ease: 'power2.out' })
 
@@ -56,8 +65,6 @@ export default function InvitationClient({ name }: { name: string }) {
           el.style.strokeDashoffset = String(len)
         })
       }
-      initStrokes('.seal-frame-outer')
-      initStrokes('.seal-frame-inner')
       initStrokes('.seal-orn-path')
       initStrokes('.ribbon-path')
 
@@ -94,10 +101,19 @@ export default function InvitationClient({ name }: { name: string }) {
           sealPlayed = true
 
           const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-          tl.to('#sealBgGlow',     { opacity: 1, duration: 1.2, ease: 'power2.inOut' }, 0)
-          tl.to('#sealFrame',      { opacity: 1, scale: 1, duration: 1.4, ease: 'power2.inOut', transformOrigin: 'center center' }, 0.05)
-          tl.to('.seal-frame-outer', { strokeDashoffset: 0, duration: 1.2, ease: 'power2.inOut' }, 0.1)
-          tl.to('.seal-frame-inner', { strokeDashoffset: 0, duration: 1.4, ease: 'power2.inOut' }, 0.25)
+          tl.to('#sealBgGlow',    { opacity: 1, duration: 1.2, ease: 'power2.inOut' }, 0)
+          // Outer frame — clockwise per-side scaleX/Y
+          tl.to('.sf-out-top',    { scaleX: 1, duration: 0.3, ease: 'power2.inOut' }, 0.1)
+          tl.to('.sf-out-right',  { scaleY: 1, duration: 0.3, ease: 'power2.inOut' }, 0.4)
+          tl.to('.sf-out-bottom', { scaleX: 1, duration: 0.3, ease: 'power2.inOut' }, 0.7)
+          tl.to('.sf-out-left',   { scaleY: 1, duration: 0.3, ease: 'power2.inOut' }, 1.0)
+          // Inner frame
+          tl.to('.sf-in-top',     { scaleX: 1, duration: 0.27, ease: 'power2.inOut' }, 0.2)
+          tl.to('.sf-in-right',   { scaleY: 1, duration: 0.27, ease: 'power2.inOut' }, 0.47)
+          tl.to('.sf-in-bottom',  { scaleX: 1, duration: 0.27, ease: 'power2.inOut' }, 0.74)
+          tl.to('.sf-in-left',    { scaleY: 1, duration: 0.27, ease: 'power2.inOut' }, 1.01)
+          // Accent lines fade in
+          tl.to('.sf-accent',     { opacity: 0.35, duration: 0.4, stagger: 0.06, ease: 'power2.out' }, 1.2)
           tl.to('.seal-orn-path',    { strokeDashoffset: 0, duration: 0.7, stagger: 0.06, ease: 'power2.inOut' }, 0.5)
           tl.to('#ribbonWrap',     { opacity: 1, y: 0, duration: 0.6, ease: 'back.out(1.3)',
             transform: 'translateX(-50%) translateY(0)' }, 0.9)
@@ -159,53 +175,17 @@ export default function InvitationClient({ name }: { name: string }) {
 
   return (
     <>
-      {/* ═══════════════ SECTION 1 — HERO ═══════════════ */}
       <section id="hero">
+        {/* Hero frame — CSS divs, perfect corners, no svg overlap */}
+        <div className="h-out-top" />
+        <div className="h-out-right" />
+        <div className="h-out-bottom" />
+        <div className="h-out-left" />
+        <div className="h-in-top" />
+        <div className="h-in-right" />
+        <div className="h-in-bottom" />
+        <div className="h-in-left" />
 
-        {/* Decorative outer frame */}
-        <svg className="frame-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <path className="frame-path" d="M 2,2 L 98,2 L 98,98 L 2,98 Z" />
-          <path className="frame-inner" d="M 4,4 L 96,4 L 96,96 L 4,96 Z" />
-          <line className="frame-inner" x1="20" y1="4"  x2="80" y2="4" />
-          <line className="frame-inner" x1="20" y1="96" x2="80" y2="96" />
-        </svg>
-
-        {/* Corner ornaments */}
-        <div className="corner-ornament tl">
-          <svg viewBox="0 0 80 80" fill="none">
-            <path d="M 4 4 L 36 4" stroke="#6b8fa8" strokeWidth="0.8" opacity="0.7" />
-            <path d="M 4 4 L 4 36" stroke="#6b8fa8" strokeWidth="0.8" opacity="0.7" />
-            <path d="M 4 4 Q 12 12 20 12 Q 28 12 28 20" stroke="#6b8fa8" strokeWidth="0.6" fill="none" opacity="0.45" />
-            <ellipse cx="10" cy="10" rx="5" ry="3.5" stroke="#c4a46b" strokeWidth="0.6" fill="none" opacity="0.5" transform="rotate(-45 10 10)" />
-            <path d="M 7 12 Q 10 8 13 12" stroke="#c4a46b" strokeWidth="0.5" fill="none" opacity="0.4" transform="rotate(-45 10 10)" />
-          </svg>
-        </div>
-        <div className="corner-ornament tr">
-          <svg viewBox="0 0 80 80" fill="none">
-            <path d="M 4 4 L 36 4" stroke="#6b8fa8" strokeWidth="0.8" opacity="0.7" />
-            <path d="M 4 4 L 4 36" stroke="#6b8fa8" strokeWidth="0.8" opacity="0.7" />
-            <path d="M 4 4 Q 12 12 20 12 Q 28 12 28 20" stroke="#6b8fa8" strokeWidth="0.6" fill="none" opacity="0.45" />
-            <ellipse cx="10" cy="10" rx="5" ry="3.5" stroke="#c4a46b" strokeWidth="0.6" fill="none" opacity="0.5" transform="rotate(-45 10 10)" />
-          </svg>
-        </div>
-        <div className="corner-ornament bl">
-          <svg viewBox="0 0 80 80" fill="none">
-            <path d="M 4 4 L 36 4" stroke="#6b8fa8" strokeWidth="0.8" opacity="0.7" />
-            <path d="M 4 4 L 4 36" stroke="#6b8fa8" strokeWidth="0.8" opacity="0.7" />
-            <path d="M 4 4 Q 12 12 20 12 Q 28 12 28 20" stroke="#6b8fa8" strokeWidth="0.6" fill="none" opacity="0.45" />
-            <ellipse cx="10" cy="10" rx="5" ry="3.5" stroke="#c4a46b" strokeWidth="0.6" fill="none" opacity="0.5" transform="rotate(-45 10 10)" />
-          </svg>
-        </div>
-        <div className="corner-ornament br">
-          <svg viewBox="0 0 80 80" fill="none">
-            <path d="M 4 4 L 36 4" stroke="#6b8fa8" strokeWidth="0.8" opacity="0.7" />
-            <path d="M 4 4 L 4 36" stroke="#6b8fa8" strokeWidth="0.8" opacity="0.7" />
-            <path d="M 4 4 Q 12 12 20 12 Q 28 12 28 20" stroke="#6b8fa8" strokeWidth="0.6" fill="none" opacity="0.45" />
-            <ellipse cx="10" cy="10" rx="5" ry="3.5" stroke="#c4a46b" strokeWidth="0.6" fill="none" opacity="0.5" transform="rotate(-45 10 10)" />
-          </svg>
-        </div>
-
-        {/* Shell opening elements */}
         <div className="shell-left" id="shellLeft">
           <svg viewBox="0 0 90 90" fill="none">
             <path d="M 75 45 Q 60 15 30 20 Q 8 25 10 45 Q 8 65 30 70 Q 60 75 75 45 Z"
@@ -246,11 +226,6 @@ export default function InvitationClient({ name }: { name: string }) {
             и греческого гостеприимства!
           </p>
         </div>
-
-        <div className="hero-scroll-hint" id="scrollHint">
-          <div className="scroll-arrow" />
-        </div>
-        <div className="hero-divider" />
       </section>
 
       {/* ═══════════════ SECTION 2 — INVITATION SEAL ═══════════════ */}
@@ -279,7 +254,6 @@ export default function InvitationClient({ name }: { name: string }) {
           <path className="seal-orn-path" d="M 346 550 Q 370 556 400 554 Q 430 556 454 550" stroke="#6b8fa8" strokeWidth="0.75" fill="none" opacity="0.42" />
         </svg>
 
-        {/* Ribbon / bow */}
         <div className="ribbon-wrap" id="ribbonWrap">
           <svg className="ribbon-svg" viewBox="0 0 200 96" fill="none">
             <path className="ribbon-path"
@@ -297,7 +271,6 @@ export default function InvitationClient({ name }: { name: string }) {
           </svg>
         </div>
 
-        {/* Center composition */}
         <div className="seal-center" id="sealCenter">
           <p className="seal-message" id="sealMessage">
             See you<br />by the sea
@@ -318,45 +291,36 @@ export default function InvitationClient({ name }: { name: string }) {
         <div className="particles-wrap" id="particlesWrap" />
       </section>
 
-      {/* ═══════════════ SECTION 3 — ATMOSPHERE ═══════════════ */}
       <section id="atmosphere">
 
         <div className="seal-bg-glow" id="sealBgGlow" />
 
-        {/* Converging outer frame */}
-        <svg className="seal-frame" id="sealFrame" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <rect className="seal-frame-outer" x="1.5" y="1.5" width="97" height="97"
-            fill="none" stroke="#6b8fa8" strokeWidth="0.65" opacity="0.6" />
-          <rect className="seal-frame-inner" x="3.5" y="3.5" width="93" height="93"
-            fill="none" stroke="#6b8fa8" strokeWidth="0.35" opacity="0.4" />
-          <line className="seal-frame-inner" x1="15"   y1="3.5"  x2="85"   y2="3.5"
-            stroke="#6b8fa8" strokeWidth="0.35" opacity="0.35" />
-          <line className="seal-frame-inner" x1="15"   y1="96.5" x2="85"   y2="96.5"
-            stroke="#6b8fa8" strokeWidth="0.35" opacity="0.35" />
-          <line className="seal-frame-inner" x1="3.5"  y1="20"   x2="3.5"  y2="80"
-            stroke="#6b8fa8" strokeWidth="0.35" opacity="0.35" />
-          <line className="seal-frame-inner" x1="96.5" y1="20"   x2="96.5" y2="80"
-            stroke="#6b8fa8" strokeWidth="0.35" opacity="0.35" />
-        </svg>
-
-        <div className="micro-shell" style={{ top: '12%', left: '8%', transform: 'rotate(-20deg)' }}>
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-            <ellipse cx="16" cy="16" rx="12" ry="8" stroke="#6b8fa8" strokeWidth="0.8" fill="rgba(107,143,168,0.06)" />
-            <path d="M 4 16 Q 10 10 16 12 Q 22 14 28 16" stroke="#6b8fa8" strokeWidth="0.5" fill="none" />
-            <path d="M 4 16 Q 10 18 16 20 Q 22 20 28 16" stroke="#6b8fa8" strokeWidth="0.5" fill="none" />
+        <div className="sf-out-top" />
+        <div className="sf-out-right" />
+        <div className="sf-out-bottom" />
+        <div className="sf-out-left" />
+        <div className="sf-in-top" />
+        <div className="sf-in-right" />
+        <div className="sf-in-bottom" />
+        <div className="sf-in-left" />
+        <div className="micro-shell" style={{ top: '12%', left: '16%', transform: 'rotate(-20deg)' }}>
+          <svg width="64" height="64" viewBox="0 0 32 32" fill="none">
+            <ellipse cx="16" cy="16" rx="12" ry="8" stroke="#6b8fa8" strokeWidth="2" fill="rgba(107,143,168,0.06)" />
+            <path d="M 4 16 Q 10 10 16 12 Q 22 14 28 16" stroke="#6b8fa8" strokeWidth="1" fill="none" />
+            <path d="M 4 16 Q 10 18 16 20 Q 22 20 28 16" stroke="#6b8fa8" strokeWidth="1" fill="none" />
           </svg>
         </div>
-        <div className="micro-shell" style={{ top: '70%', right: '6%', transform: 'rotate(15deg)' }}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <ellipse cx="12" cy="12" rx="9" ry="6" stroke="#c4a46b" strokeWidth="0.7" fill="rgba(196,164,107,0.05)" />
-            <path d="M 3 12 Q 7 8 12 9 Q 17 10 21 12" stroke="#c4a46b" strokeWidth="0.4" fill="none" />
+        <div className="micro-shell" style={{ top: '70%', right: '20%', transform: 'rotate(15deg)' }}>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+            <ellipse cx="12" cy="12" rx="9" ry="6" stroke="#c4a46b" strokeWidth="2" fill="rgba(196,164,107,0.05)" />
+            <path d="M 3 12 Q 7 8 12 9 Q 17 10 21 12" stroke="#c4a46b" strokeWidth="1" fill="none" />
           </svg>
         </div>
-        <div className="micro-shell" style={{ bottom: '15%', left: '12%', transform: 'rotate(30deg)' }}>
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <ellipse cx="10" cy="10" rx="8" ry="5" stroke="#6b8fa8" strokeWidth="0.6" fill="none" />
-            <path d="M 2 10 Q 6 7 10 8 Q 14 9 18 10" stroke="#6b8fa8" strokeWidth="0.4" fill="none" />
-            <path d="M 2 10 Q 6 13 10 12 Q 14 11 18 10" stroke="#6b8fa8" strokeWidth="0.4" fill="none" />
+        <div className="micro-shell" style={{ bottom: '15%', left: '14%', transform: 'rotate(30deg)' }}>
+          <svg width="40" height="40" viewBox="0 0 20 20" fill="none">
+            <ellipse cx="10" cy="10" rx="8" ry="5" stroke="#6b8fa8" strokeWidth="1.5" fill="none" />
+            <path d="M 2 10 Q 6 7 10 8 Q 14 9 18 10" stroke="#6b8fa8" strokeWidth="1" fill="none" />
+            <path d="M 2 10 Q 6 13 10 12 Q 14 11 18 10" stroke="#6b8fa8" strokeWidth="1" fill="none" />
           </svg>
         </div>
 

@@ -30,7 +30,7 @@ html {
 body {
   background: var(--cream);
   color: var(--text);
-  font-family: 'Cormorant Garamond', serif;
+  font-family: "Cormorant Garamond", serif;
   font-weight: 300;
   overflow-x: hidden;
   cursor: default;
@@ -38,7 +38,7 @@ body {
 
 /* ───────────────────────────── PAPER TEXTURE OVERLAY ───────────────────────── */
 body::before {
-  content: '';
+  content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
@@ -63,7 +63,7 @@ body::before {
 }
 
 #hero::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: radial-gradient(
@@ -74,47 +74,6 @@ body::before {
   pointer-events: none;
 }
 
-.frame-svg {
-  position: absolute;
-  inset: 32px;
-  width: calc(100% - 64px);
-  height: calc(100% - 64px);
-  pointer-events: none;
-}
-
-.frame-path {
-  fill: none;
-  stroke: var(--blue);
-  stroke-width: 1;
-  opacity: 0.6;
-  stroke-dasharray: 3000;
-  stroke-dashoffset: 3000;
-}
-
-.frame-inner {
-  fill: none;
-  stroke: var(--blue);
-  stroke-width: 0.5;
-  opacity: 0.35;
-  stroke-dasharray: 2500;
-  stroke-dashoffset: 2500;
-}
-
-.corner-ornament {
-  position: absolute;
-  width: 80px;
-  height: 80px;
-  opacity: 0;
-}
-.corner-ornament svg {
-  width: 100%;
-  height: 100%;
-}
-.corner-ornament.tl { top: 44px; left: 44px; }
-.corner-ornament.tr { top: 44px; right: 44px; transform: scaleX(-1); }
-.corner-ornament.bl { bottom: 44px; left: 44px; transform: scaleY(-1); }
-.corner-ornament.br { bottom: 44px; right: 44px; transform: scale(-1); }
-
 .shell-left,
 .shell-right {
   position: absolute;
@@ -123,8 +82,14 @@ body::before {
   z-index: 2;
   opacity: 0;
 }
-.shell-left  { left: 50%; transform: translate(-110%, -50%); }
-.shell-right { left: 50%; transform: translate(10%, -50%); }
+.shell-left {
+  left: 50%;
+  transform: translate(-110%, -50%);
+}
+.shell-right {
+  left: 50%;
+  transform: translate(10%, -50%);
+}
 .shell-left svg,
 .shell-right svg {
   width: 90px;
@@ -151,7 +116,7 @@ body::before {
 }
 
 .hero-overline {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: "Cormorant Garamond", serif;
   font-weight: 400;
   font-size: clamp(0.65rem, 1.5vw, 0.8rem);
   letter-spacing: 0.35em;
@@ -162,7 +127,7 @@ body::before {
 }
 
 .hero-script {
-  font-family: 'Parisienne', cursive;
+  font-family: "Parisienne", cursive;
   font-size: clamp(3.2rem, 9vw, 6.5rem);
   color: var(--blue);
   line-height: 1.1;
@@ -173,7 +138,7 @@ body::before {
 }
 
 .hero-name {
-  font-family: 'Parisienne', cursive;
+  font-family: "Parisienne", cursive;
   font-size: clamp(2rem, 6vw, 4rem);
   color: var(--deep-blue);
   opacity: 0;
@@ -191,7 +156,7 @@ body::before {
 }
 .hero-separator::before,
 .hero-separator::after {
-  content: '';
+  content: "";
   flex: 1;
   max-width: 80px;
   height: 1px;
@@ -205,7 +170,7 @@ body::before {
 }
 
 .hero-sub {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: "Cormorant Garamond", serif;
   font-weight: 300;
   font-style: italic;
   font-size: clamp(1rem, 2.5vw, 1.35rem);
@@ -233,8 +198,15 @@ body::before {
   animation: scrollPulse 2s ease-in-out infinite;
 }
 @keyframes scrollPulse {
-  0%, 100% { opacity: 0.4; transform: scaleY(1); }
-  50%       { opacity: 1;   transform: scaleY(1.15); }
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scaleY(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1.15);
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -253,12 +225,20 @@ body::before {
 }
 
 #atmosphere::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 50% at 15% 50%, rgba(107, 143, 168, 0.04) 0%, transparent 60%),
-    radial-gradient(ellipse 80% 50% at 85% 50%, rgba(107, 143, 168, 0.04) 0%, transparent 60%);
+    radial-gradient(
+      ellipse 80% 50% at 15% 50%,
+      rgba(107, 143, 168, 0.04) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 80% 50% at 85% 50%,
+      rgba(107, 143, 168, 0.04) 0%,
+      transparent 60%
+    );
 }
 
 .atm-card {
@@ -273,7 +253,9 @@ body::before {
   opacity: 0.25;
   pointer-events: none;
 }
-.micro-shell svg { display: block; }
+.micro-shell svg {
+  display: block;
+}
 
 .atm-eyebrow {
   font-size: 0.7rem;
@@ -285,7 +267,7 @@ body::before {
 }
 
 .atm-line {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: "Cormorant Garamond", serif;
   font-weight: 300;
   font-size: clamp(1.4rem, 3.5vw, 2rem);
   line-height: 1.7;
@@ -294,11 +276,16 @@ body::before {
   opacity: 0;
   transform: translateY(30px);
 }
-.atm-line em { font-style: italic; color: var(--blue); }
-.atm-line:last-of-type { margin-bottom: 56px; }
+.atm-line em {
+  font-style: italic;
+  color: var(--blue);
+}
+.atm-line:last-of-type {
+  margin-bottom: 56px;
+}
 
 .atm-signature {
-  font-family: 'Parisienne', cursive;
+  font-family: "Parisienne", cursive;
   font-size: clamp(1.6rem, 4vw, 2.4rem);
   color: var(--blue);
   opacity: 0;
@@ -331,25 +318,21 @@ body::before {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 85% 70% at 50% 48%, rgba(210, 175, 115, 0.13) 0%, rgba(196, 164, 107, 0.06) 50%, transparent 75%),
-    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(196, 164, 107, 0.07) 0%, transparent 60%);
+    radial-gradient(
+      ellipse 85% 70% at 50% 48%,
+      rgba(210, 175, 115, 0.13) 0%,
+      rgba(196, 164, 107, 0.06) 50%,
+      transparent 75%
+    ),
+    radial-gradient(
+      ellipse 60% 40% at 50% 100%,
+      rgba(196, 164, 107, 0.07) 0%,
+      transparent 60%
+    );
   opacity: 0;
   pointer-events: none;
   transition: none;
 }
-
-.seal-frame {
-  position: absolute;
-  inset: 36px;
-  width: calc(100% - 72px);
-  height: calc(100% - 72px);
-  transform-origin: center center;
-  transform: scale(1.025);
-  opacity: 0;
-  pointer-events: none;
-}
-.seal-frame-outer { stroke-dasharray: 2600; stroke-dashoffset: 2600; }
-.seal-frame-inner { stroke-dasharray: 2200; stroke-dashoffset: 2200; }
 
 .seal-ornaments-svg {
   position: absolute;
@@ -374,8 +357,14 @@ body::before {
   width: 200px;
   height: 96px;
 }
-.ribbon-svg { width: 100%; height: 100%; }
-.ribbon-path { stroke-dasharray: 400; stroke-dashoffset: 400; }
+.ribbon-svg {
+  width: 100%;
+  height: 100%;
+}
+.ribbon-path {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+}
 
 .seal-center {
   position: relative;
@@ -391,7 +380,7 @@ body::before {
 }
 
 .seal-message {
-  font-family: 'Parisienne', cursive;
+  font-family: "Parisienne", cursive;
   font-size: clamp(2.4rem, 7vw, 4rem);
   color: var(--deep-blue);
   line-height: 1.25;
@@ -410,15 +399,22 @@ body::before {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: radial-gradient(circle at 33% 30%, #ffffff 0%, #eaf3f8 18%, #c2d8e8 45%, #92b8d0 72%, #6b8fa8 100%);
+  background: radial-gradient(
+    circle at 33% 30%,
+    #ffffff 0%,
+    #eaf3f8 18%,
+    #c2d8e8 45%,
+    #92b8d0 72%,
+    #6b8fa8 100%
+  );
   box-shadow:
-    inset -4px -4px 10px rgba(0, 0, 0, 0.10),
-    inset  3px  3px  8px rgba(255, 255, 255, 0.55),
+    inset -4px -4px 10px rgba(0, 0, 0, 0.1),
+    inset 3px 3px 8px rgba(255, 255, 255, 0.55),
     0 6px 24px rgba(107, 143, 168, 0.28),
-    0 2px  8px rgba(0, 0, 0, 0.10);
+    0 2px 8px rgba(0, 0, 0, 0.1);
 }
 .pearl-inner::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 6px;
   border-radius: 50%;
@@ -429,7 +425,12 @@ body::before {
   position: absolute;
   inset: -18px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(196, 164, 107, 0.22) 0%, rgba(107, 143, 168, 0.12) 40%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(196, 164, 107, 0.22) 0%,
+    rgba(107, 143, 168, 0.12) 40%,
+    transparent 70%
+  );
   opacity: 0;
   transform: scale(0.5);
 }
@@ -440,13 +441,13 @@ body::before {
   text-align: center;
 }
 .seal-date {
-  font-family: 'Parisienne', cursive;
+  font-family: "Parisienne", cursive;
   font-size: clamp(1.5rem, 4.5vw, 2.1rem);
   color: var(--blue);
   margin-bottom: 4px;
 }
 .seal-time {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: "Cormorant Garamond", serif;
   font-size: clamp(0.78rem, 1.6vw, 0.92rem);
   letter-spacing: 0.38em;
   text-transform: uppercase;
@@ -461,7 +462,7 @@ body::before {
   margin: 0 auto 20px;
 }
 .seal-venue {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: "Cormorant Garamond", serif;
   font-weight: 400;
   font-size: clamp(0.95rem, 2vw, 1.15rem);
   font-style: italic;
@@ -469,7 +470,7 @@ body::before {
   line-height: 1.8;
 }
 .seal-address {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: "Cormorant Garamond", serif;
   font-size: clamp(0.68rem, 1.4vw, 0.8rem);
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -489,18 +490,93 @@ body::before {
   opacity: 0;
 }
 @keyframes particleDrift {
-  0%   { transform: translateY(0)    rotate(0deg);   opacity: 0; }
-  15%  { opacity: 1; }
-  85%  { opacity: 0.6; }
-  100% { transform: translateY(-60px) rotate(180deg); opacity: 0; }
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-60px) rotate(180deg);
+    opacity: 0;
+  }
+}
+
+/* ── Hero frame divs ── */
+.h-out-top, .h-out-bottom,
+.h-out-left, .h-out-right,
+.h-in-top, .h-in-bottom,
+.h-in-left, .h-in-right {
+  position: absolute;
+  pointer-events: none;
+}
+/* Outer 10px — verticals start/end exactly at bar thickness so corners are flush */
+.h-out-top    { top: 32px; left: 32px; right: 32px; height: 10px; background: rgba(107,143,168,0.6); transform: scaleX(0); transform-origin: left center; }
+.h-out-bottom { bottom: 32px; left: 32px; right: 32px; height: 10px; background: rgba(107,143,168,0.6); transform: scaleX(0); transform-origin: right center; }
+.h-out-right  { top: 42px; right: 32px; bottom: 42px; width: 10px; background: rgba(107,143,168,0.6); transform: scaleY(0); transform-origin: center top; }
+.h-out-left   { top: 42px; left: 32px; bottom: 42px; width: 10px; background: rgba(107,143,168,0.6); transform: scaleY(0); transform-origin: center bottom; }
+/* Inner 5px */
+.h-in-top    { top: 56px; left: 56px; right: 56px; height: 5px; background: rgba(107,143,168,0.35); transform: scaleX(0); transform-origin: left center; }
+.h-in-bottom { bottom: 56px; left: 56px; right: 56px; height: 5px; background: rgba(107,143,168,0.35); transform: scaleX(0); transform-origin: right center; }
+.h-in-right  { top: 61px; right: 56px; bottom: 61px; width: 5px; background: rgba(107,143,168,0.35); transform: scaleY(0); transform-origin: center top; }
+.h-in-left   { top: 61px; left: 56px; bottom: 61px; width: 5px; background: rgba(107,143,168,0.35); transform: scaleY(0); transform-origin: center bottom; }
+
+/* ── Seal frame divs (in #atmosphere) ── */
+.sf-out-top, .sf-out-bottom,
+.sf-out-left, .sf-out-right,
+.sf-in-top, .sf-in-bottom,
+.sf-in-left, .sf-in-right {
+  position: absolute;
+  pointer-events: none;
+}
+.sf-out-top    { top: 36px; left: 36px; right: 36px; height: 10px; background: rgba(107,143,168,0.6); transform: scaleX(0); transform-origin: left center; }
+.sf-out-bottom { bottom: 36px; left: 36px; right: 36px; height: 10px; background: rgba(107,143,168,0.6); transform: scaleX(0); transform-origin: right center; }
+.sf-out-right  { top: 46px; right: 36px; bottom: 46px; width: 10px; background: rgba(107,143,168,0.6); transform: scaleY(0); transform-origin: center top; }
+.sf-out-left   { top: 46px; left: 36px; bottom: 46px; width: 10px; background: rgba(107,143,168,0.6); transform: scaleY(0); transform-origin: center bottom; }
+.sf-in-top    { top: 56px; left: 56px; right: 56px; height: 5px; background: rgba(107,143,168,0.4); transform: scaleX(0); transform-origin: left center; }
+.sf-in-bottom { bottom: 56px; left: 56px; right: 56px; height: 5px; background: rgba(107,143,168,0.4); transform: scaleX(0); transform-origin: right center; }
+.sf-in-right  { top: 61px; right: 56px; bottom: 61px; width: 5px; background: rgba(107,143,168,0.4); transform: scaleY(0); transform-origin: center top; }
+.sf-in-left   { top: 61px; left: 56px; bottom: 61px; width: 5px; background: rgba(107,143,168,0.4); transform: scaleY(0); transform-origin: center bottom; }
+
+.sf-accent-svg {
+  position: absolute;
+  inset: 36px;
+  width: calc(100% - 72px);
+  height: calc(100% - 72px);
+  pointer-events: none;
 }
 
 /* ───────────────────────────── RESPONSIVE ───────────────────────────────── */
 @media (max-width: 600px) {
-  .frame-svg { inset: 16px; width: calc(100% - 32px); height: calc(100% - 32px); }
-  .corner-ornament.tl { top: 20px; left: 20px; }
-  .corner-ornament.tr { top: 20px; right: 20px; }
-  .corner-ornament.bl { bottom: 20px; left: 20px; }
-  .corner-ornament.br { bottom: 20px; right: 20px; }
-  .seal-center { padding: 80px 24px 40px; }
+  .h-out-top    { top: 16px; left: 16px; right: 16px; }
+  .h-out-bottom { bottom: 16px; left: 16px; right: 16px; }
+  .h-out-right  { top: 26px; right: 16px; bottom: 26px; }
+  .h-out-left   { top: 26px; left: 16px; bottom: 26px; }
+  .h-in-top    { top: 30px; left: 30px; right: 30px; }
+  .h-in-bottom { bottom: 30px; left: 30px; right: 30px; }
+  .h-in-right  { top: 35px; right: 30px; bottom: 35px; }
+  .h-in-left   { top: 35px; left: 30px; bottom: 35px; }
+  .corner-ornament.tl {
+    top: 20px;
+    left: 20px;
+  }
+  .corner-ornament.tr {
+    top: 20px;
+    right: 20px;
+  }
+  .corner-ornament.bl {
+    bottom: 20px;
+    left: 20px;
+  }
+  .corner-ornament.br {
+    bottom: 20px;
+    right: 20px;
+  }
+  .seal-center {
+    padding: 80px 24px 40px;
+  }
 }
