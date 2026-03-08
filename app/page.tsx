@@ -1,13 +1,12 @@
-import type { Metadata } from 'next'
 import InvitationClient from '@/components/InvitationClient'
+
+export const dynamic = 'force-dynamic'
 
 interface PageProps {
   searchParams: Promise<{ name?: string }>
 }
 
-export async function generateMetadata({
-  searchParams,
-}: PageProps): Promise<Metadata> {
+export default async function Page({ searchParams }: PageProps) {
   const { name } = await searchParams
   const guest = name ? decodeURIComponent(name).trim() : ''
 
@@ -21,33 +20,22 @@ export async function generateMetadata({
 
   const ogImage = `/api/og${guest ? `?name=${encodeURIComponent(guest)}` : ''}`
 
-  return {
-    title,
-    description,
-    openGraph: {
-      title,
-      description,
-      type: 'website',
-      images: [
-        {
-          url: ogImage,
-          width: 1200,
-          height: 630,
-          alt: title,
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
-      images: [ogImage],
-    },
-  }
-}
-
-export default async function Page({ searchParams }: PageProps) {
-  const { name } = await searchParams
-  const guest = name ? decodeURIComponent(name).trim() : ''
-  return <InvitationClient name={guest} />
+  return (
+    <>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:type" content="website" />
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content={title} />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={ogImage} />
+      <InvitationClient name={guest} />
+    </>
+  )
 }
