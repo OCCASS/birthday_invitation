@@ -87,30 +87,30 @@ export default function InvitationClient({ name }: { name: string }) {
       /* ── 6. SEAL SEQUENCE (scroll-triggered, plays once) ── */
       let sealPlayed = false
       ScrollTrigger.create({
-        trigger: '#atmosphere',
+        trigger: '#seal-section',
         start: 'top 60%',
         onEnter: () => {
           if (sealPlayed) return
           sealPlayed = true
 
           const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-          tl.to('#sealBgGlow',     { opacity: 1, duration: 2.2, ease: 'power2.inOut' }, 0)
-          tl.to('#sealFrame',      { opacity: 1, scale: 1, duration: 2.6, ease: 'power2.inOut', transformOrigin: 'center center' }, 0.1)
-          tl.to('.seal-frame-outer', { strokeDashoffset: 0, duration: 2.4, ease: 'power2.inOut' }, 0.2)
-          tl.to('.seal-frame-inner', { strokeDashoffset: 0, duration: 2.8, ease: 'power2.inOut' }, 0.5)
-          tl.to('.seal-orn-path',    { strokeDashoffset: 0, duration: 1.4, stagger: 0.1, ease: 'power2.inOut' }, 0.9)
-          tl.to('#ribbonWrap',     { opacity: 1, y: 0, duration: 0.9, ease: 'back.out(1.3)',
-            transform: 'translateX(-50%) translateY(0)' }, 1.6)
-          tl.to('.ribbon-path',    { strokeDashoffset: 0, duration: 1.1, stagger: 0.07, ease: 'power2.inOut' }, 1.7)
-          tl.to('#sealMessage',    { opacity: 1, y: 0, duration: 1.1 }, 2.8)
-          tl.to('#pearlSeal',      { opacity: 1, y: 0, scale: 1, duration: 0.75, ease: 'back.out(1.8)' }, 3.7)
-          tl.to('#pearlGlow',      { opacity: 1, scale: 1, duration: 1.6, ease: 'power2.out' }, 3.85)
+          tl.to('#sealBgGlow',     { opacity: 1, duration: 1.2, ease: 'power2.inOut' }, 0)
+          tl.to('#sealFrame',      { opacity: 1, scale: 1, duration: 1.4, ease: 'power2.inOut', transformOrigin: 'center center' }, 0.05)
+          tl.to('.seal-frame-outer', { strokeDashoffset: 0, duration: 1.2, ease: 'power2.inOut' }, 0.1)
+          tl.to('.seal-frame-inner', { strokeDashoffset: 0, duration: 1.4, ease: 'power2.inOut' }, 0.25)
+          tl.to('.seal-orn-path',    { strokeDashoffset: 0, duration: 0.7, stagger: 0.06, ease: 'power2.inOut' }, 0.5)
+          tl.to('#ribbonWrap',     { opacity: 1, y: 0, duration: 0.6, ease: 'back.out(1.3)',
+            transform: 'translateX(-50%) translateY(0)' }, 0.9)
+          tl.to('.ribbon-path',    { strokeDashoffset: 0, duration: 0.7, stagger: 0.05, ease: 'power2.inOut' }, 1.0)
+          tl.to('#sealMessage',    { opacity: 1, y: 0, duration: 0.7 }, 1.5)
+          tl.to('#pearlSeal',      { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'back.out(1.8)' }, 2.0)
+          tl.to('#pearlGlow',      { opacity: 1, scale: 1, duration: 0.9, ease: 'power2.out' }, 2.1)
           tl.call(() => {
             gsap.to('#pearlGlow', { scale: 1.12, opacity: 0.7, duration: 2.2, yoyo: true, repeat: -1, ease: 'sine.inOut' })
-          }, [], 5.5)
-          tl.to('#sealInfo',      { opacity: 1, y: 0, duration: 1.1 }, 4.2)
-          tl.to('#sealInfoDiv',   { width: 60, duration: 0.8, ease: 'power2.inOut' }, 4.4)
-          tl.to('.particle',      { opacity: 1, stagger: { amount: 1.8, from: 'random' }, duration: 1.5 }, 3.4)
+          }, [], 3.0)
+          tl.to('#sealInfo',      { opacity: 1, y: 0, duration: 0.7 }, 2.3)
+          tl.to('#sealInfoDiv',   { width: 60, duration: 0.5, ease: 'power2.inOut' }, 2.5)
+          tl.to('.particle',      { opacity: 1, stagger: { amount: 1.2, from: 'random' }, duration: 1.0 }, 1.8)
         },
       })
 
@@ -133,7 +133,7 @@ export default function InvitationClient({ name }: { name: string }) {
         if (sl) sl.style.transform = `translate(calc(-110% - ${heroExit * 140}px), -50%)`
         if (sr) sr.style.transform = `translate(calc(10%  + ${heroExit * 140}px), -50%)`
 
-        const atm = document.getElementById('seal-section')
+        const atm = document.getElementById('atmosphere')
         if (atm && !atmDone) {
           const prog = Math.max(0, Math.min(1,
             (sy - atm.offsetTop + window.innerHeight * 0.75) / atm.offsetHeight))
@@ -256,24 +256,6 @@ export default function InvitationClient({ name }: { name: string }) {
       {/* ═══════════════ SECTION 2 — INVITATION SEAL ═══════════════ */}
       <section id="seal-section">
 
-        <div className="seal-bg-glow" id="sealBgGlow" />
-
-        {/* Converging outer frame */}
-        <svg className="seal-frame" id="sealFrame" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <rect className="seal-frame-outer" x="1.5" y="1.5" width="97" height="97"
-            fill="none" stroke="#6b8fa8" strokeWidth="0.65" opacity="0.6" />
-          <rect className="seal-frame-inner" x="3.5" y="3.5" width="93" height="93"
-            fill="none" stroke="#6b8fa8" strokeWidth="0.35" opacity="0.4" />
-          <line className="seal-frame-inner" x1="15"   y1="3.5"  x2="85"   y2="3.5"
-            stroke="#6b8fa8" strokeWidth="0.35" opacity="0.35" />
-          <line className="seal-frame-inner" x1="15"   y1="96.5" x2="85"   y2="96.5"
-            stroke="#6b8fa8" strokeWidth="0.35" opacity="0.35" />
-          <line className="seal-frame-inner" x1="3.5"  y1="20"   x2="3.5"  y2="80"
-            stroke="#6b8fa8" strokeWidth="0.35" opacity="0.35" />
-          <line className="seal-frame-inner" x1="96.5" y1="20"   x2="96.5" y2="80"
-            stroke="#6b8fa8" strokeWidth="0.35" opacity="0.35" />
-        </svg>
-
         {/* Re-drawing ornament flourishes */}
         <svg className="seal-ornaments-svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
           <path className="seal-orn-path" d="M 58 58 Q 82 42 116 48 Q 138 52 148 66" stroke="#6b8fa8" strokeWidth="0.9" fill="none" opacity="0.5" />
@@ -338,6 +320,24 @@ export default function InvitationClient({ name }: { name: string }) {
 
       {/* ═══════════════ SECTION 3 — ATMOSPHERE ═══════════════ */}
       <section id="atmosphere">
+
+        <div className="seal-bg-glow" id="sealBgGlow" />
+
+        {/* Converging outer frame */}
+        <svg className="seal-frame" id="sealFrame" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <rect className="seal-frame-outer" x="1.5" y="1.5" width="97" height="97"
+            fill="none" stroke="#6b8fa8" strokeWidth="0.65" opacity="0.6" />
+          <rect className="seal-frame-inner" x="3.5" y="3.5" width="93" height="93"
+            fill="none" stroke="#6b8fa8" strokeWidth="0.35" opacity="0.4" />
+          <line className="seal-frame-inner" x1="15"   y1="3.5"  x2="85"   y2="3.5"
+            stroke="#6b8fa8" strokeWidth="0.35" opacity="0.35" />
+          <line className="seal-frame-inner" x1="15"   y1="96.5" x2="85"   y2="96.5"
+            stroke="#6b8fa8" strokeWidth="0.35" opacity="0.35" />
+          <line className="seal-frame-inner" x1="3.5"  y1="20"   x2="3.5"  y2="80"
+            stroke="#6b8fa8" strokeWidth="0.35" opacity="0.35" />
+          <line className="seal-frame-inner" x1="96.5" y1="20"   x2="96.5" y2="80"
+            stroke="#6b8fa8" strokeWidth="0.35" opacity="0.35" />
+        </svg>
 
         <div className="micro-shell" style={{ top: '12%', left: '8%', transform: 'rotate(-20deg)' }}>
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
