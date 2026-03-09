@@ -3,38 +3,19 @@ import { NextRequest } from 'next/server'
 
 export const runtime = 'edge'
 
-// ── Fetch a Google Font as TTF (needed by Satori / ImageResponse) ────────────
-async function fetchGoogleFont(
-  family: string,
-  weight: number,
-  style: 'normal' | 'italic' = 'normal'
-): Promise<ArrayBuffer | null> {
-  const ital = style === 'italic' ? 1 : 0
-  const api = `https://fonts.googleapis.com/css2?family=${family.replace(/ /g, '+')}:ital,wght@${ital},${weight}`
+async function loadGoogleFont(font: string, text: string): Promise<ArrayBuffer> {
+  const url = `https://fonts.googleapis.com/css2?family=${font}&text=${encodeURIComponent(text)}`
+  const css = await (await fetch(url)).text()
+  const resource = css.match(/src: url\((.+)\) format\('(opentype|truetype)'\)/)
 
-  try {
-    const css = await fetch(api, {
-      headers: {
-        // older UA → Google returns TTF instead of WOFF2
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 5.1; rv:40.0) Gecko/20100101 Firefox/40.1',
-      },
-    }).then((r) => r.text())
-
-    const match = css.match(/src:\s*url\(([^)]+)\)\s*format\(['"]?truetype['"]?\)/)
-    if (!match) {
-      // fallback: grab any url() present
-      const anyUrl = css.match(/url\(([^)]+\.ttf[^)]*)\)/)
-      if (!anyUrl) return null
-      return fetch(anyUrl[1]).then((r) => r.arrayBuffer())
-    }
-    return fetch(match[1]).then((r) => r.arrayBuffer())
-  } catch {
-    return null
+  if (resource) {
+    const response = await fetch(resource[1])
+    if (response.status === 200) return response.arrayBuffer()
   }
+
+  throw new Error('failed to load font data')
 }
 
-// ── Corner ornament SVG (reused × 4 with transforms) ─────────────────────────
 function CornerOrnament() {
   return (
     <svg width="70" height="70" viewBox="0 0 70 70">
@@ -49,7 +30,6 @@ function CornerOrnament() {
   )
 }
 
-// ── Small shell illustration ──────────────────────────────────────────────────
 function ShellAccent({ size = 26 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 26 26" fill="none">
@@ -62,28 +42,27 @@ function ShellAccent({ size = 26 }: { size?: number }) {
   )
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 export async function GET(request: NextRequest) {
+  try {
   const { searchParams } = new URL(request.url)
   const rawName = searchParams.get('name') ?? ''
-  // Sanitise: max 28 chars to prevent overflow
   const guest = rawName.slice(0, 28).trim()
 
-  // Load fonts (best-effort; if either fails, ImageResponse falls back to
-  // the system serif which still looks elegant)
-  const [fontItalic, fontRegular] = await Promise.all([
-    fetchGoogleFont('Cormorant Garamond', 300, 'italic'),
-    fetchGoogleFont('Cormorant Garamond', 400, 'normal'),
+  const italicText = `${guest}приглашение на день рождение Софии Греческий ресторан «DIA»`
+  const normalTextBase = 'день рождения · 28 марта Суббота, 28 марта · 18:00'
+  const normalText = normalTextBase + normalTextBase.toUpperCase()
+
+  type Weight = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
+  const [fontItalic, fontNormal] = await Promise.all([
+    loadGoogleFont('Cormorant+Garamond:ital,wght@1,300', italicText),
+    loadGoogleFont('Cormorant+Garamond:ital,wght@0,400', normalText),
   ])
+  const fonts: { name: string; data: ArrayBuffer; style: 'normal' | 'italic'; weight: Weight }[] = [
+    { name: 'Cormorant Garamond', data: fontItalic, style: 'italic', weight: 300 },
+    { name: 'Cormorant Garamond', data: fontNormal, style: 'normal', weight: 400 },
+  ]
 
-  // Weight must match Satori's `Weight` union type (100 | 200 | 300 | 400 | …)
-  type W = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
-  type FontEntry = { name: string; data: ArrayBuffer; style: 'normal' | 'italic'; weight: W }
-  const fonts: FontEntry[] = []
-  if (fontItalic)  fonts.push({ name: 'Cormorant Garamond', data: fontItalic,  style: 'italic', weight: 300 as W })
-  if (fontRegular) fonts.push({ name: 'Cormorant Garamond', data: fontRegular, style: 'normal', weight: 400 as W })
-
-  return new ImageResponse(
+  const imgResponse = new ImageResponse(
     (
       <div
         style={{
@@ -95,7 +74,6 @@ export async function GET(request: NextRequest) {
           fontFamily: '"Cormorant Garamond", Georgia, serif',
         }}
       >
-        {/* Subtle warm vignette */}
         <div
           style={{
             position: 'absolute',
@@ -105,7 +83,6 @@ export async function GET(request: NextRequest) {
           }}
         />
 
-        {/* ── Outer border frame ── */}
         <div
           style={{
             position: 'absolute',
@@ -113,7 +90,6 @@ export async function GET(request: NextRequest) {
             border: '1px solid rgba(107,143,168,0.55)',
           }}
         />
-        {/* Inner border frame */}
         <div
           style={{
             position: 'absolute',
@@ -122,25 +98,19 @@ export async function GET(request: NextRequest) {
           }}
         />
 
-        {/* ── Corner ornaments ── */}
-        {/* TL */}
         <div style={{ position: 'absolute', top: 34, left: 34, display: 'flex' }}>
           <CornerOrnament />
         </div>
-        {/* TR */}
         <div style={{ position: 'absolute', top: 34, right: 34, display: 'flex', transform: 'scaleX(-1)' }}>
           <CornerOrnament />
         </div>
-        {/* BL */}
         <div style={{ position: 'absolute', bottom: 34, left: 34, display: 'flex', transform: 'scaleY(-1)' }}>
           <CornerOrnament />
         </div>
-        {/* BR */}
         <div style={{ position: 'absolute', bottom: 34, right: 34, display: 'flex', transform: 'scale(-1)' }}>
           <CornerOrnament />
         </div>
 
-        {/* ── Top center decoration ── */}
         <div
           style={{
             position: 'absolute',
@@ -158,7 +128,6 @@ export async function GET(request: NextRequest) {
           <div style={{ width: 56, height: 1, background: 'rgba(107,143,168,0.38)' }} />
         </div>
 
-        {/* ── Bottom center decoration ── */}
         <div
           style={{
             position: 'absolute',
@@ -180,11 +149,13 @@ export async function GET(request: NextRequest) {
           <div style={{ width: 56, height: 1, background: 'rgba(107,143,168,0.38)' }} />
         </div>
 
-        {/* ── Main content column ── */}
         <div
           style={{
             position: 'absolute',
-            inset: 0,
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -194,11 +165,10 @@ export async function GET(request: NextRequest) {
             textAlign: 'center',
           }}
         >
-          {/* Overline */}
           <div
             style={{
               fontSize: 13,
-              letterSpacing: '0.42em',
+              letterSpacing: '0.4em',
               textTransform: 'uppercase',
               color: '#c4a46b',
               marginBottom: guest ? 22 : 32,
@@ -206,10 +176,9 @@ export async function GET(request: NextRequest) {
               fontStyle: 'normal',
             }}
           >
-            день рождения · 12 июля
+            день рождения · 28 марта 
           </div>
 
-          {/* Guest name (if present) */}
           {guest && (
             <div
               style={{
@@ -220,14 +189,12 @@ export async function GET(request: NextRequest) {
                 lineHeight: 1.1,
                 marginBottom: 18,
                 maxWidth: 860,
-                overflow: 'hidden',
               }}
             >
-              {guest},
+              {guest}
             </div>
           )}
 
-          {/* Invitation line 1 */}
           <div
             style={{
               fontSize: guest ? 33 : 50,
@@ -238,10 +205,9 @@ export async function GET(request: NextRequest) {
               marginBottom: 4,
             }}
           >
-            {guest ? 'ты приглашена на' : 'приглашение на'}
+            приглашение на
           </div>
 
-          {/* Invitation line 2 */}
           <div
             style={{
               fontSize: guest ? 33 : 50,
@@ -252,7 +218,7 @@ export async function GET(request: NextRequest) {
               marginBottom: 30,
             }}
           >
-            день рождения Sofii
+            день рождение Софии
           </div>
 
           {/* Separator */}
@@ -280,7 +246,7 @@ export async function GET(request: NextRequest) {
               fontStyle: 'normal',
             }}
           >
-            Суббота, 12 июля · 19:00
+            Суббота, 28 марта · 18:00
           </div>
 
           {/* Venue */}
@@ -293,12 +259,17 @@ export async function GET(request: NextRequest) {
               marginTop: 7,
             }}
           >
-            Restaurant Paros, Santorini
+             Греческий ресторан «DIA»
           </div>
         </div>
       </div>
     ),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    { width: 1200, height: 630, fonts } as any
+    { width: 1200, height: 630, fonts }
   )
+  const buf = await imgResponse.arrayBuffer()
+  return new Response(buf, { headers: { 'Content-Type': 'image/png' } })
+  } catch (e) {
+    console.error('OG image generation failed:', e)
+    return new Response('Failed to generate image', { status: 500 })
+  }
 }

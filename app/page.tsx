@@ -2,6 +2,12 @@ import InvitationClient from '@/components/InvitationClient'
 
 export const dynamic = 'force-dynamic'
 
+function getBaseUrl() {
+  if (process.env.NEXT_PUBLIC_BASE_URL) return process.env.NEXT_PUBLIC_BASE_URL
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`
+  return 'http://localhost:3002'
+}
+
 interface PageProps {
   searchParams: Promise<{ name?: string }>
 }
@@ -18,7 +24,8 @@ export default async function Page({ searchParams }: PageProps) {
     ? `${guest}, тебя ждёт особенный вечер у моря 🩵`
     : 'Особенный вечер у моря — приглашение на день рождения'
 
-  const ogImage = `/api/og${guest ? `?name=${encodeURIComponent(guest)}` : ''}`
+  const base = getBaseUrl()
+  const ogImage = `${base}/api/og${guest ? `?name=${encodeURIComponent(guest)}` : ''}`
 
   return (
     <>
