@@ -331,7 +331,7 @@ export default function InvitationClient({ name }: { name: string }) {
           <p className="atm-line">the kind of night that stays with you —</p>
           <p className="atm-line">and the people <em>closest to my heart.</em></p>
           <div className="atm-rule" id="atmRule" />
-          <p className="atm-signature" id="atmSig">with love</p>
+          <p className="atm-signature" id="atmSig">with love, Sofia</p>
         </div>
       </section>
     </>

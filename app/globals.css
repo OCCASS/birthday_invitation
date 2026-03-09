@@ -220,7 +220,7 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 100px 40px;
+  padding: 100px;
   overflow: hidden;
 }
 
@@ -507,40 +507,176 @@ body::before {
 }
 
 /* ── Hero frame divs ── */
-.h-out-top, .h-out-bottom,
-.h-out-left, .h-out-right,
-.h-in-top, .h-in-bottom,
-.h-in-left, .h-in-right {
+.h-out-top,
+.h-out-bottom,
+.h-out-left,
+.h-out-right,
+.h-in-top,
+.h-in-bottom,
+.h-in-left,
+.h-in-right {
   position: absolute;
   pointer-events: none;
 }
 /* Outer 10px — verticals start/end exactly at bar thickness so corners are flush */
-.h-out-top    { top: 32px; left: 32px; right: 32px; height: 10px; background: rgba(107,143,168,0.6); transform: scaleX(0); transform-origin: left center; }
-.h-out-bottom { bottom: 32px; left: 32px; right: 32px; height: 10px; background: rgba(107,143,168,0.6); transform: scaleX(0); transform-origin: right center; }
-.h-out-right  { top: 42px; right: 32px; bottom: 42px; width: 10px; background: rgba(107,143,168,0.6); transform: scaleY(0); transform-origin: center top; }
-.h-out-left   { top: 42px; left: 32px; bottom: 42px; width: 10px; background: rgba(107,143,168,0.6); transform: scaleY(0); transform-origin: center bottom; }
+.h-out-top {
+  top: 32px;
+  left: 32px;
+  right: 32px;
+  height: 10px;
+  background: rgba(107, 143, 168, 0.6);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.h-out-bottom {
+  bottom: 32px;
+  left: 32px;
+  right: 32px;
+  height: 10px;
+  background: rgba(107, 143, 168, 0.6);
+  transform: scaleX(0);
+  transform-origin: right center;
+}
+.h-out-right {
+  top: 42px;
+  right: 32px;
+  bottom: 42px;
+  width: 10px;
+  background: rgba(107, 143, 168, 0.6);
+  transform: scaleY(0);
+  transform-origin: center top;
+}
+.h-out-left {
+  top: 42px;
+  left: 32px;
+  bottom: 42px;
+  width: 10px;
+  background: rgba(107, 143, 168, 0.6);
+  transform: scaleY(0);
+  transform-origin: center bottom;
+}
 /* Inner 5px */
-.h-in-top    { top: 56px; left: 56px; right: 56px; height: 5px; background: rgba(107,143,168,0.35); transform: scaleX(0); transform-origin: left center; }
-.h-in-bottom { bottom: 56px; left: 56px; right: 56px; height: 5px; background: rgba(107,143,168,0.35); transform: scaleX(0); transform-origin: right center; }
-.h-in-right  { top: 61px; right: 56px; bottom: 61px; width: 5px; background: rgba(107,143,168,0.35); transform: scaleY(0); transform-origin: center top; }
-.h-in-left   { top: 61px; left: 56px; bottom: 61px; width: 5px; background: rgba(107,143,168,0.35); transform: scaleY(0); transform-origin: center bottom; }
+.h-in-top {
+  top: 56px;
+  left: 56px;
+  right: 56px;
+  height: 5px;
+  background: rgba(107, 143, 168, 0.35);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.h-in-bottom {
+  bottom: 56px;
+  left: 56px;
+  right: 56px;
+  height: 5px;
+  background: rgba(107, 143, 168, 0.35);
+  transform: scaleX(0);
+  transform-origin: right center;
+}
+.h-in-right {
+  top: 61px;
+  right: 56px;
+  bottom: 61px;
+  width: 5px;
+  background: rgba(107, 143, 168, 0.35);
+  transform: scaleY(0);
+  transform-origin: center top;
+}
+.h-in-left {
+  top: 61px;
+  left: 56px;
+  bottom: 61px;
+  width: 5px;
+  background: rgba(107, 143, 168, 0.35);
+  transform: scaleY(0);
+  transform-origin: center bottom;
+}
 
 /* ── Seal frame divs (in #atmosphere) ── */
-.sf-out-top, .sf-out-bottom,
-.sf-out-left, .sf-out-right,
-.sf-in-top, .sf-in-bottom,
-.sf-in-left, .sf-in-right {
+.sf-out-top,
+.sf-out-bottom,
+.sf-out-left,
+.sf-out-right,
+.sf-in-top,
+.sf-in-bottom,
+.sf-in-left,
+.sf-in-right {
   position: absolute;
   pointer-events: none;
 }
-.sf-out-top    { top: 36px; left: 36px; right: 36px; height: 10px; background: rgba(107,143,168,0.6); transform: scaleX(0); transform-origin: left center; }
-.sf-out-bottom { bottom: 36px; left: 36px; right: 36px; height: 10px; background: rgba(107,143,168,0.6); transform: scaleX(0); transform-origin: right center; }
-.sf-out-right  { top: 46px; right: 36px; bottom: 46px; width: 10px; background: rgba(107,143,168,0.6); transform: scaleY(0); transform-origin: center top; }
-.sf-out-left   { top: 46px; left: 36px; bottom: 46px; width: 10px; background: rgba(107,143,168,0.6); transform: scaleY(0); transform-origin: center bottom; }
-.sf-in-top    { top: 56px; left: 56px; right: 56px; height: 5px; background: rgba(107,143,168,0.4); transform: scaleX(0); transform-origin: left center; }
-.sf-in-bottom { bottom: 56px; left: 56px; right: 56px; height: 5px; background: rgba(107,143,168,0.4); transform: scaleX(0); transform-origin: right center; }
-.sf-in-right  { top: 61px; right: 56px; bottom: 61px; width: 5px; background: rgba(107,143,168,0.4); transform: scaleY(0); transform-origin: center top; }
-.sf-in-left   { top: 61px; left: 56px; bottom: 61px; width: 5px; background: rgba(107,143,168,0.4); transform: scaleY(0); transform-origin: center bottom; }
+.sf-out-top {
+  top: 36px;
+  left: 36px;
+  right: 36px;
+  height: 10px;
+  background: rgba(107, 143, 168, 0.6);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.sf-out-bottom {
+  bottom: 36px;
+  left: 36px;
+  right: 36px;
+  height: 10px;
+  background: rgba(107, 143, 168, 0.6);
+  transform: scaleX(0);
+  transform-origin: right center;
+}
+.sf-out-right {
+  top: 46px;
+  right: 36px;
+  bottom: 46px;
+  width: 10px;
+  background: rgba(107, 143, 168, 0.6);
+  transform: scaleY(0);
+  transform-origin: center top;
+}
+.sf-out-left {
+  top: 46px;
+  left: 36px;
+  bottom: 46px;
+  width: 10px;
+  background: rgba(107, 143, 168, 0.6);
+  transform: scaleY(0);
+  transform-origin: center bottom;
+}
+.sf-in-top {
+  top: 56px;
+  left: 56px;
+  right: 56px;
+  height: 5px;
+  background: rgba(107, 143, 168, 0.4);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.sf-in-bottom {
+  bottom: 56px;
+  left: 56px;
+  right: 56px;
+  height: 5px;
+  background: rgba(107, 143, 168, 0.4);
+  transform: scaleX(0);
+  transform-origin: right center;
+}
+.sf-in-right {
+  top: 61px;
+  right: 56px;
+  bottom: 61px;
+  width: 5px;
+  background: rgba(107, 143, 168, 0.4);
+  transform: scaleY(0);
+  transform-origin: center top;
+}
+.sf-in-left {
+  top: 61px;
+  left: 56px;
+  bottom: 61px;
+  width: 5px;
+  background: rgba(107, 143, 168, 0.4);
+  transform: scaleY(0);
+  transform-origin: center bottom;
+}
 
 .sf-accent-svg {
   position: absolute;
@@ -552,14 +688,46 @@ body::before {
 
 /* ───────────────────────────── RESPONSIVE ───────────────────────────────── */
 @media (max-width: 600px) {
-  .h-out-top    { top: 16px; left: 16px; right: 16px; }
-  .h-out-bottom { bottom: 16px; left: 16px; right: 16px; }
-  .h-out-right  { top: 26px; right: 16px; bottom: 26px; }
-  .h-out-left   { top: 26px; left: 16px; bottom: 26px; }
-  .h-in-top    { top: 30px; left: 30px; right: 30px; }
-  .h-in-bottom { bottom: 30px; left: 30px; right: 30px; }
-  .h-in-right  { top: 35px; right: 30px; bottom: 35px; }
-  .h-in-left   { top: 35px; left: 30px; bottom: 35px; }
+  .h-out-top {
+    top: 16px;
+    left: 16px;
+    right: 16px;
+  }
+  .h-out-bottom {
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+  }
+  .h-out-right {
+    top: 26px;
+    right: 16px;
+    bottom: 26px;
+  }
+  .h-out-left {
+    top: 26px;
+    left: 16px;
+    bottom: 26px;
+  }
+  .h-in-top {
+    top: 30px;
+    left: 30px;
+    right: 30px;
+  }
+  .h-in-bottom {
+    bottom: 30px;
+    left: 30px;
+    right: 30px;
+  }
+  .h-in-right {
+    top: 35px;
+    right: 30px;
+    bottom: 35px;
+  }
+  .h-in-left {
+    top: 35px;
+    left: 30px;
+    bottom: 35px;
+  }
   .corner-ornament.tl {
     top: 20px;
     left: 20px;
